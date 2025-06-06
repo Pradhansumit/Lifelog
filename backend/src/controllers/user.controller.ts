@@ -5,29 +5,29 @@ const jwt = require("jsonwebtoken");
 
 const userClient = new PrismaClient().user;
 
-// getAllUsers
+// GET ALL USERS
 export const getAllUsers = async (req, res) => {
   try {
-    console.log(req.body);
     const allUsers = await userClient.findMany();
-    res.status(200).json({ data: allUsers });
+    return res.status(200).json({ data: allUsers });
   } catch (error) {
     console.log(error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
-//getUserById
+// GET USER BY ID
 export const getUserById = async (req, res) => {
   try {
     const userId = req.params.id;
     const user = await userClient.findUnique({ where: { id: userId } });
-    res.status(200).json({ data: user });
+    return res.status(200).json({ data: user });
   } catch (error) {
-    res.status(404).json({ message: "User not found" });
+    return res.status(404).json({ message: "User not found" });
   }
 };
 
-//register user or user creationj w
+//REGISTER USER OR USER CREATION
 export const registerUser = async (req, res) => {
   try {
     const userData = req.body;
@@ -38,7 +38,7 @@ export const registerUser = async (req, res) => {
       data: userData,
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       data: {
         id: user.id,
         name: user.name,
@@ -49,11 +49,11 @@ export const registerUser = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(501).json({ message: "Registration failed." });
+    return res.status(501).json({ message: "Registration failed." });
   }
 };
 
-// login user
+// USER LOGIN
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -78,13 +78,14 @@ export const loginUser = async (req, res) => {
     );
     console.log(token);
     res.cookie("jwt_token", token);
-    res.status(200).json({ message: "Login Successful." });
+    return res.status(200).json({ message: "Login Successful." });
   } catch (error) {
     console.log(error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
-//update User data
+//UPDATE USER DATA
 export const updateUser = async (req, res) => {
   try {
     const userId = req.params.id;
@@ -93,27 +94,31 @@ export const updateUser = async (req, res) => {
       where: { id: userId },
       data: userData,
     });
-    res.status(200).json({ data: user });
-  } catch (error) {}
+    return res.status(200).json({ data: user });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
 };
 
-//delete User or deleting account by the user
+// DELETING ACCOUNT OR USER
 export const deleteUser = async (req, res) => {
   try {
     const userId = req.params.id;
     const user = await userClient.delete({ where: { id: userId } });
     res.status(200).json({ data: user });
   } catch (error) {
-    res.status(404).json({ message: "User not found." });
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
-// for logging out user
+// USER LOGOUT
 export const logout = async (req, res) => {
   try {
     res.clearCookie("jwt_token");
     res.status(200).json({ message: "Logout Successful" });
   } catch (error) {
     console.log(error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };

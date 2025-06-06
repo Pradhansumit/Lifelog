@@ -13,12 +13,14 @@ import {
 
 const userRouter = Router();
 
-userRouter.get("/", requireAuth, getAllUsers); // for getting all the users
-userRouter.get("/user/:id", getUserById); // for getting specific user
-userRouter.post("/register/", registerUser); // for registring users
-userRouter.post("/login/", loginUser); // for logging in the user and receiving jwt token
+userRouter.get("/", requireAuth, getAllUsers);
+userRouter.get("/user/:id", getUserById);
 userRouter.put("/:id", updateUser);
 userRouter.delete("/:id", deleteUser);
+
+// endpoints for user creation and authentication
+userRouter.post("/register/", registerUser);
+userRouter.post("/login/", loginUser);
 userRouter.get("/logout/", logout);
 
 export default userRouter;
