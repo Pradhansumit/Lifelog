@@ -3,35 +3,36 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import api from "@/config/axios";
 import { useRef } from "react";
-import { Link, useNavigate } from "react-router";
+import api from "@/config/axios";
+import { useNavigate } from "react-router";
 
-export default function Login() {
+const Register = () => {
+  const nameRef: React.RefObject<null> = useRef(null);
   const emailRef: React.RefObject<null> = useRef(null);
   const passwordRef: React.RefObject<null> = useRef(null);
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const emailValue: React.RefObject<string> = emailRef.current.value;
-    const passwordValue: React.RefObject<string> = passwordRef.current.value;
-
     try {
-      const res = await api.post("users/login/", {
+      e.preventDefault();
+      const nameValue: React.RefObject<string> = nameRef.current.value;
+      const emailValue: React.RefObject<string> = emailRef.current.value;
+      const passwordValue: React.RefObject<string> = passwordRef.current.value;
+
+      const res = await api.post("users/register/", {
+        name: nameValue,
         email: emailValue,
         password: passwordValue,
       });
-      console.log(res);
-      if (res.status === 200) {
-        navigate("/dashboard/");
+      if (res.status === 201) {
+        navigate("/login/");
       }
     } catch (error) {
       console.log(error);
@@ -42,14 +43,24 @@ export default function Login() {
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
+          <CardTitle>Create you account</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Register using a valid email address
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-6">
+              <div className="grid gap-2">
+                <Label htmlFor="email">Name</Label>
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder="John Doe"
+                  ref={nameRef}
+                  required
+                />
+              </div>
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -61,15 +72,7 @@ export default function Login() {
                 />
               </div>
               <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <a
-                    href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot your password?
-                  </a>
-                </div>
+                <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
                   type="password"
@@ -79,19 +82,13 @@ export default function Login() {
               </div>
             </div>
             <Button type="submit" className="w-full mt-4">
-              Login
+              Register
             </Button>
           </form>
         </CardContent>
-        <CardFooter className="flex-col gap-2">
-          <div className="text-center text-sm">
-            Don&apos;t have an account?{" "}
-            <Link to="/register" className="underline underline-offset-4">
-              Sign up
-            </Link>
-          </div>
-        </CardFooter>
       </Card>
     </div>
   );
-}
+};
+
+export default Register;

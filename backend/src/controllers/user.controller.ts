@@ -59,12 +59,12 @@ export const loginUser = async (req, res) => {
     const { email, password } = req.body;
     const user = await userClient.findFirst({ where: { email: email } });
     if (!user) {
-      res.status(404).json({ message: "Email not found." });
+      return res.status(404).json({ message: "Email not found." });
     }
     console.log(password);
     const isValid = await bcrypt.compare(password, user.password);
     if (isValid!) {
-      res.status(404).json({ message: "Password is not correct." });
+      return res.status(404).json({ message: "Password is not correct." });
     }
     const secret_key = process.env.JWT_SECRET_KEY;
     const token = jwt.sign(
