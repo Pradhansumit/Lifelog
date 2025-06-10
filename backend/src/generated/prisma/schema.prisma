@@ -38,3 +38,10 @@ model MoodEntry {
 
   @@unique([userId, date])
 }
+
+model OTP {
+  id        Int      @id @default(autoincrement())
+  otp       Int
+  email     String
+  createdAt DateTime @default(now())
+}

@@ -9,6 +9,9 @@ import {
   registerUser,
   loginUser,
   logout,
+  emailForForgetPassword,
+  optVerification,
+  updateForgetPassword,
 } from "../controllers/user.controller";
 
 const userRouter = Router();
@@ -22,5 +25,8 @@ userRouter.delete("/:id", deleteUser);
 userRouter.post("/register/", registerUser);
 userRouter.post("/login/", loginUser);
 userRouter.get("/logout/", logout);
+userRouter.post("/forget-password", emailForForgetPassword);
+userRouter.post("/verify-otp", optVerification);
+userRouter.post("/update-password", updateForgetPassword);
 
 export default userRouter;

@@ -139,6 +139,13 @@ exports.Prisma.MoodEntryScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.OTPScalarFieldEnum = {
+  id: 'id',
+  otp: 'otp',
+  email: 'email',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -157,7 +164,8 @@ exports.Prisma.NullsOrder = {
 
 exports.Prisma.ModelName = {
   User: 'User',
-  MoodEntry: 'MoodEntry'
+  MoodEntry: 'MoodEntry',
+  OTP: 'OTP'
 };
 
 /**
