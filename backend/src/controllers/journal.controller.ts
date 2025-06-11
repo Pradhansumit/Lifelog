@@ -1,11 +1,9 @@
-import { PrismaClient } from "../generated/prisma";
-
-const journalClient = new PrismaClient().moodEntry;
+import prisma from "../db/prisma";
 
 // GET ALL MOOD ENTRIES
 export const getAllEntries = async (req, res) => {
   try {
-    const allEntries = await journalClient.findMany();
+    const allEntries = await prisma.moodEntry.findMany();
     return res.status(200).json({ data: allEntries });
   } catch (error) {
     console.log(error);
@@ -17,7 +15,7 @@ export const getAllEntries = async (req, res) => {
 export const getEntryById = async (req, res) => {
   try {
     const entryId = parseInt(req.params.id);
-    const entry = await journalClient.findUnique({ where: { id: entryId } });
+    const entry = await prisma.moodEntry.findUnique({ where: { id: entryId } });
     if (entry) {
       return res.status(200).json({ data: entry });
     } else {
@@ -32,11 +30,10 @@ export const getEntryById = async (req, res) => {
 // ADD/CREATE MOOD ENTRY
 export const createEntry = async (req, res) => {
   try {
-    console.log(res.body);
     const entryData = req.body;
     entryData.date = new Date(entryData.date);
 
-    const entry = await journalClient.create({
+    const entry = await prisma.moodEntry.create({
       data: entryData,
     });
     return res.status(201).json({
@@ -56,11 +53,11 @@ export const createEntry = async (req, res) => {
 export const updateEntry = async (req, res) => {
   try {
     const entryId = parseInt(req.params.id);
-    const entry = await journalClient.findFirst({ where: { id: entryId } });
+    const entry = await prisma.moodEntry.findFirst({ where: { id: entryId } });
     if (!entry) {
       return res.status(404).json({ message: "Entry not found." });
     }
-    const updateEntry = await journalClient.update({
+    const updateEntry = await prisma.moodEntry.update({
       where: { id: entryId },
       data: req.body,
     });
@@ -83,7 +80,7 @@ export const updateEntry = async (req, res) => {
 export const deleteEntry = async (req, res) => {
   try {
     const entryId = parseInt(req.params.id);
-    const entry = await journalClient.delete({ where: { id: entryId } });
+    const entry = await prisma.moodEntry.delete({ where: { id: entryId } });
     return res.status(200).json({ data: entry });
   } catch (error) {
     console.log(error);

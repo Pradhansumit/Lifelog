@@ -1,20 +1,15 @@
 import sendEmail from "../utils/sendEmail";
-import { PrismaClient } from "../generated/prisma";
 import bcrypt from "bcrypt";
+import prisma from "../db/prisma";
 
 const jwt = require("jsonwebtoken");
-
-const userClient = new PrismaClient().user;
-const otpClient = new PrismaClient({
-  log: ["query", "info", "warn", "error"],
-}).oTP;
 
 // ------------ BASIC CRUD ------------
 
 // GET ALL USERS
 export const getAllUsers = async (req, res) => {
   try {
-    const allUsers = await userClient.findMany();
+    const allUsers = await prisma.user.findMany();
     return res.status(200).json({ data: allUsers });
   } catch (error) {
     console.log(error);
@@ -26,7 +21,7 @@ export const getAllUsers = async (req, res) => {
 export const getUserById = async (req, res) => {
   try {
     const userId = req.params.id;
-    const user = await userClient.findUnique({ where: { id: userId } });
+    const user = await prisma.user.findUnique({ where: { id: userId } });
     return res.status(200).json({ data: user });
   } catch (error) {
     return res.status(404).json({ message: "User not found" });
@@ -38,7 +33,7 @@ export const updateUser = async (req, res) => {
   try {
     const userId = req.params.id;
     const userData = req.body;
-    const user = await userClient.update({
+    const user = await prisma.user.update({
       where: { id: userId },
       data: userData,
     });
@@ -53,7 +48,7 @@ export const updateUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
   try {
     const userId = req.params.id;
-    const user = await userClient.delete({ where: { id: userId } });
+    const user = await prisma.user.delete({ where: { id: userId } });
     res.status(200).json({ data: user });
   } catch (error) {
     return res.status(500).json({ message: "Internal server error" });
@@ -66,7 +61,7 @@ export const deleteUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await userClient.findFirst({ where: { email: email } });
+    const user = await prisma.user.findFirst({ where: { email: email } });
     if (!user) {
       return res.status(404).json({ message: "Email not found." });
     }
@@ -110,7 +105,7 @@ export const registerUser = async (req, res) => {
     const hash = await bcrypt.hash(userData.password, 10);
     userData.password = hash;
 
-    const user = await userClient.create({
+    const user = await prisma.user.create({
       data: userData,
     });
 
@@ -134,12 +129,12 @@ export const registerUser = async (req, res) => {
 export const emailForForgetPassword = async (req, res) => {
   try {
     const { email } = req.body;
-    const user = await userClient.findFirst({ where: { email: email } });
+    const user = await prisma.user.findFirst({ where: { email: email } });
     if (!user) {
       return res.status(404).json({ message: "Email not found." });
     }
     const otp = Math.floor(Math.random() * 1000000);
-    const otpQuery = await otpClient.create({
+    const otpQuery = await prisma.oTP.create({
       data: { userId: user.id, otp: otp },
     });
     // logic for sending the opt to the email
@@ -169,13 +164,13 @@ export const optVerification = async (req, res) => {
   try {
     const { email, otp } = req.body;
 
-    const user = await userClient.findFirst({ where: { email } });
+    const user = await prisma.user.findFirst({ where: { email } });
     if (!user) {
       return res.status(404).json({ message: "Email not found." });
     }
     console.log(user.id);
 
-    const validOTP = await otpClient.findFirst({
+    const validOTP = await prisma.oTP.findFirst({
       where: { userId: user.id, otp: parseInt(otp) },
     });
 
@@ -201,13 +196,13 @@ export const optVerification = async (req, res) => {
 export const updateForgetPassword = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await userClient.findFirst({ where: { email: email } });
+    const user = await prisma.user.findFirst({ where: { email: email } });
     if (!user) {
       return res.status(404).status({ message: "Email not found." });
     }
     const hashPassword = await bcrypt.hash(password, 10);
 
-    await userClient.update({
+    await prisma.user.update({
       where: { id: user.id },
       data: { password: hashPassword },
     });
