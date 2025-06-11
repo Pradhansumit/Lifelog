@@ -1052,10 +1052,12 @@ export namespace Prisma {
 
   export type UserCountOutputType = {
     moodEntries: number
+    otp: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     moodEntries?: boolean | UserCountOutputTypeCountMoodEntriesArgs
+    otp?: boolean | UserCountOutputTypeCountOtpArgs
   }
 
   // Custom InputTypes
@@ -1074,6 +1076,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountMoodEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MoodEntryWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountOtpArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OTPWhereInput
   }
 
 
@@ -1288,6 +1297,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     moodEntries?: boolean | User$moodEntriesArgs<ExtArgs>
+    otp?: boolean | User$otpArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1321,6 +1331,7 @@ export namespace Prisma {
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     moodEntries?: boolean | User$moodEntriesArgs<ExtArgs>
+    otp?: boolean | User$otpArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1330,6 +1341,7 @@ export namespace Prisma {
     name: "User"
     objects: {
       moodEntries: Prisma.$MoodEntryPayload<ExtArgs>[]
+      otp: Prisma.$OTPPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -1733,6 +1745,7 @@ export namespace Prisma {
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     moodEntries<T extends User$moodEntriesArgs<ExtArgs> = {}>(args?: Subset<T, User$moodEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MoodEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    otp<T extends User$otpArgs<ExtArgs> = {}>(args?: Subset<T, User$otpArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OTPPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2177,6 +2190,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: MoodEntryScalarFieldEnum | MoodEntryScalarFieldEnum[]
+  }
+
+  /**
+   * User.otp
+   */
+  export type User$otpArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OTP
+     */
+    select?: OTPSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the OTP
+     */
+    omit?: OTPOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OTPInclude<ExtArgs> | null
+    where?: OTPWhereInput
+    orderBy?: OTPOrderByWithRelationInput | OTPOrderByWithRelationInput[]
+    cursor?: OTPWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OTPScalarFieldEnum | OTPScalarFieldEnum[]
   }
 
   /**
@@ -3335,32 +3372,34 @@ export namespace Prisma {
   export type OTPAvgAggregateOutputType = {
     id: number | null
     otp: number | null
+    userId: number | null
   }
 
   export type OTPSumAggregateOutputType = {
     id: number | null
     otp: number | null
+    userId: number | null
   }
 
   export type OTPMinAggregateOutputType = {
     id: number | null
     otp: number | null
-    email: string | null
     createdAt: Date | null
+    userId: number | null
   }
 
   export type OTPMaxAggregateOutputType = {
     id: number | null
     otp: number | null
-    email: string | null
     createdAt: Date | null
+    userId: number | null
   }
 
   export type OTPCountAggregateOutputType = {
     id: number
     otp: number
-    email: number
     createdAt: number
+    userId: number
     _all: number
   }
 
@@ -3368,32 +3407,34 @@ export namespace Prisma {
   export type OTPAvgAggregateInputType = {
     id?: true
     otp?: true
+    userId?: true
   }
 
   export type OTPSumAggregateInputType = {
     id?: true
     otp?: true
+    userId?: true
   }
 
   export type OTPMinAggregateInputType = {
     id?: true
     otp?: true
-    email?: true
     createdAt?: true
+    userId?: true
   }
 
   export type OTPMaxAggregateInputType = {
     id?: true
     otp?: true
-    email?: true
     createdAt?: true
+    userId?: true
   }
 
   export type OTPCountAggregateInputType = {
     id?: true
     otp?: true
-    email?: true
     createdAt?: true
+    userId?: true
     _all?: true
   }
 
@@ -3486,8 +3527,8 @@ export namespace Prisma {
   export type OTPGroupByOutputType = {
     id: number
     otp: number
-    email: string
     createdAt: Date
+    userId: number
     _count: OTPCountAggregateOutputType | null
     _avg: OTPAvgAggregateOutputType | null
     _sum: OTPSumAggregateOutputType | null
@@ -3512,41 +3553,55 @@ export namespace Prisma {
   export type OTPSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     otp?: boolean
-    email?: boolean
     createdAt?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["oTP"]>
 
   export type OTPSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     otp?: boolean
-    email?: boolean
     createdAt?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["oTP"]>
 
   export type OTPSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     otp?: boolean
-    email?: boolean
     createdAt?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["oTP"]>
 
   export type OTPSelectScalar = {
     id?: boolean
     otp?: boolean
-    email?: boolean
     createdAt?: boolean
+    userId?: boolean
   }
 
-  export type OTPOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "otp" | "email" | "createdAt", ExtArgs["result"]["oTP"]>
+  export type OTPOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "otp" | "createdAt" | "userId", ExtArgs["result"]["oTP"]>
+  export type OTPInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type OTPIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type OTPIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
 
   export type $OTPPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "OTP"
-    objects: {}
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       otp: number
-      email: string
       createdAt: Date
+      userId: number
     }, ExtArgs["result"]["oTP"]>
     composites: {}
   }
@@ -3941,6 +3996,7 @@ export namespace Prisma {
    */
   export interface Prisma__OTPClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3972,8 +4028,8 @@ export namespace Prisma {
   interface OTPFieldRefs {
     readonly id: FieldRef<"OTP", 'Int'>
     readonly otp: FieldRef<"OTP", 'Int'>
-    readonly email: FieldRef<"OTP", 'String'>
     readonly createdAt: FieldRef<"OTP", 'DateTime'>
+    readonly userId: FieldRef<"OTP", 'Int'>
   }
     
 
@@ -3990,6 +4046,10 @@ export namespace Prisma {
      * Omit specific fields from the OTP
      */
     omit?: OTPOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OTPInclude<ExtArgs> | null
     /**
      * Filter, which OTP to fetch.
      */
@@ -4009,6 +4069,10 @@ export namespace Prisma {
      */
     omit?: OTPOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OTPInclude<ExtArgs> | null
+    /**
      * Filter, which OTP to fetch.
      */
     where: OTPWhereUniqueInput
@@ -4026,6 +4090,10 @@ export namespace Prisma {
      * Omit specific fields from the OTP
      */
     omit?: OTPOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OTPInclude<ExtArgs> | null
     /**
      * Filter, which OTP to fetch.
      */
@@ -4075,6 +4143,10 @@ export namespace Prisma {
      */
     omit?: OTPOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OTPInclude<ExtArgs> | null
+    /**
      * Filter, which OTP to fetch.
      */
     where?: OTPWhereInput
@@ -4123,6 +4195,10 @@ export namespace Prisma {
      */
     omit?: OTPOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OTPInclude<ExtArgs> | null
+    /**
      * Filter, which OTPS to fetch.
      */
     where?: OTPWhereInput
@@ -4166,6 +4242,10 @@ export namespace Prisma {
      */
     omit?: OTPOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OTPInclude<ExtArgs> | null
+    /**
      * The data needed to create a OTP.
      */
     data: XOR<OTPCreateInput, OTPUncheckedCreateInput>
@@ -4199,6 +4279,10 @@ export namespace Prisma {
      */
     data: OTPCreateManyInput | OTPCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OTPIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -4213,6 +4297,10 @@ export namespace Prisma {
      * Omit specific fields from the OTP
      */
     omit?: OTPOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OTPInclude<ExtArgs> | null
     /**
      * The data needed to update a OTP.
      */
@@ -4265,6 +4353,10 @@ export namespace Prisma {
      * Limit how many OTPS to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OTPIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -4279,6 +4371,10 @@ export namespace Prisma {
      * Omit specific fields from the OTP
      */
     omit?: OTPOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OTPInclude<ExtArgs> | null
     /**
      * The filter to search for the OTP to update in case it exists.
      */
@@ -4305,6 +4401,10 @@ export namespace Prisma {
      * Omit specific fields from the OTP
      */
     omit?: OTPOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OTPInclude<ExtArgs> | null
     /**
      * Filter which OTP to delete.
      */
@@ -4337,6 +4437,10 @@ export namespace Prisma {
      * Omit specific fields from the OTP
      */
     omit?: OTPOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OTPInclude<ExtArgs> | null
   }
 
 
@@ -4382,8 +4486,8 @@ export namespace Prisma {
   export const OTPScalarFieldEnum: {
     id: 'id',
     otp: 'otp',
-    email: 'email',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    userId: 'userId'
   };
 
   export type OTPScalarFieldEnum = (typeof OTPScalarFieldEnum)[keyof typeof OTPScalarFieldEnum]
@@ -4488,6 +4592,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     moodEntries?: MoodEntryListRelationFilter
+    otp?: OTPListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -4498,6 +4603,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     moodEntries?: MoodEntryOrderByRelationAggregateInput
+    otp?: OTPOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -4511,6 +4617,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     moodEntries?: MoodEntryListRelationFilter
+    otp?: OTPListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -4613,15 +4720,17 @@ export namespace Prisma {
     NOT?: OTPWhereInput | OTPWhereInput[]
     id?: IntFilter<"OTP"> | number
     otp?: IntFilter<"OTP"> | number
-    email?: StringFilter<"OTP"> | string
     createdAt?: DateTimeFilter<"OTP"> | Date | string
+    userId?: IntFilter<"OTP"> | number
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type OTPOrderByWithRelationInput = {
     id?: SortOrder
     otp?: SortOrder
-    email?: SortOrder
     createdAt?: SortOrder
+    userId?: SortOrder
+    user?: UserOrderByWithRelationInput
   }
 
   export type OTPWhereUniqueInput = Prisma.AtLeast<{
@@ -4630,15 +4739,16 @@ export namespace Prisma {
     OR?: OTPWhereInput[]
     NOT?: OTPWhereInput | OTPWhereInput[]
     otp?: IntFilter<"OTP"> | number
-    email?: StringFilter<"OTP"> | string
     createdAt?: DateTimeFilter<"OTP"> | Date | string
+    userId?: IntFilter<"OTP"> | number
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
 
   export type OTPOrderByWithAggregationInput = {
     id?: SortOrder
     otp?: SortOrder
-    email?: SortOrder
     createdAt?: SortOrder
+    userId?: SortOrder
     _count?: OTPCountOrderByAggregateInput
     _avg?: OTPAvgOrderByAggregateInput
     _max?: OTPMaxOrderByAggregateInput
@@ -4652,8 +4762,8 @@ export namespace Prisma {
     NOT?: OTPScalarWhereWithAggregatesInput | OTPScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"OTP"> | number
     otp?: IntWithAggregatesFilter<"OTP"> | number
-    email?: StringWithAggregatesFilter<"OTP"> | string
     createdAt?: DateTimeWithAggregatesFilter<"OTP"> | Date | string
+    userId?: IntWithAggregatesFilter<"OTP"> | number
   }
 
   export type UserCreateInput = {
@@ -4663,6 +4773,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     moodEntries?: MoodEntryCreateNestedManyWithoutUserInput
+    otp?: OTPCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -4673,6 +4784,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     moodEntries?: MoodEntryUncheckedCreateNestedManyWithoutUserInput
+    otp?: OTPUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -4682,6 +4794,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     moodEntries?: MoodEntryUpdateManyWithoutUserNestedInput
+    otp?: OTPUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -4692,6 +4805,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     moodEntries?: MoodEntryUncheckedUpdateManyWithoutUserNestedInput
+    otp?: OTPUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -4788,48 +4902,47 @@ export namespace Prisma {
 
   export type OTPCreateInput = {
     otp: number
-    email: string
     createdAt?: Date | string
+    user: UserCreateNestedOneWithoutOtpInput
   }
 
   export type OTPUncheckedCreateInput = {
     id?: number
     otp: number
-    email: string
     createdAt?: Date | string
+    userId: number
   }
 
   export type OTPUpdateInput = {
     otp?: IntFieldUpdateOperationsInput | number
-    email?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutOtpNestedInput
   }
 
   export type OTPUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     otp?: IntFieldUpdateOperationsInput | number
-    email?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: IntFieldUpdateOperationsInput | number
   }
 
   export type OTPCreateManyInput = {
     id?: number
     otp: number
-    email: string
     createdAt?: Date | string
+    userId: number
   }
 
   export type OTPUpdateManyMutationInput = {
     otp?: IntFieldUpdateOperationsInput | number
-    email?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type OTPUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     otp?: IntFieldUpdateOperationsInput | number
-    email?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: IntFieldUpdateOperationsInput | number
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -4875,7 +4988,17 @@ export namespace Prisma {
     none?: MoodEntryWhereInput
   }
 
+  export type OTPListRelationFilter = {
+    every?: OTPWhereInput
+    some?: OTPWhereInput
+    none?: OTPWhereInput
+  }
+
   export type MoodEntryOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type OTPOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -5053,32 +5176,34 @@ export namespace Prisma {
   export type OTPCountOrderByAggregateInput = {
     id?: SortOrder
     otp?: SortOrder
-    email?: SortOrder
     createdAt?: SortOrder
+    userId?: SortOrder
   }
 
   export type OTPAvgOrderByAggregateInput = {
     id?: SortOrder
     otp?: SortOrder
+    userId?: SortOrder
   }
 
   export type OTPMaxOrderByAggregateInput = {
     id?: SortOrder
     otp?: SortOrder
-    email?: SortOrder
     createdAt?: SortOrder
+    userId?: SortOrder
   }
 
   export type OTPMinOrderByAggregateInput = {
     id?: SortOrder
     otp?: SortOrder
-    email?: SortOrder
     createdAt?: SortOrder
+    userId?: SortOrder
   }
 
   export type OTPSumOrderByAggregateInput = {
     id?: SortOrder
     otp?: SortOrder
+    userId?: SortOrder
   }
 
   export type MoodEntryCreateNestedManyWithoutUserInput = {
@@ -5088,11 +5213,25 @@ export namespace Prisma {
     connect?: MoodEntryWhereUniqueInput | MoodEntryWhereUniqueInput[]
   }
 
+  export type OTPCreateNestedManyWithoutUserInput = {
+    create?: XOR<OTPCreateWithoutUserInput, OTPUncheckedCreateWithoutUserInput> | OTPCreateWithoutUserInput[] | OTPUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OTPCreateOrConnectWithoutUserInput | OTPCreateOrConnectWithoutUserInput[]
+    createMany?: OTPCreateManyUserInputEnvelope
+    connect?: OTPWhereUniqueInput | OTPWhereUniqueInput[]
+  }
+
   export type MoodEntryUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<MoodEntryCreateWithoutUserInput, MoodEntryUncheckedCreateWithoutUserInput> | MoodEntryCreateWithoutUserInput[] | MoodEntryUncheckedCreateWithoutUserInput[]
     connectOrCreate?: MoodEntryCreateOrConnectWithoutUserInput | MoodEntryCreateOrConnectWithoutUserInput[]
     createMany?: MoodEntryCreateManyUserInputEnvelope
     connect?: MoodEntryWhereUniqueInput | MoodEntryWhereUniqueInput[]
+  }
+
+  export type OTPUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<OTPCreateWithoutUserInput, OTPUncheckedCreateWithoutUserInput> | OTPCreateWithoutUserInput[] | OTPUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OTPCreateOrConnectWithoutUserInput | OTPCreateOrConnectWithoutUserInput[]
+    createMany?: OTPCreateManyUserInputEnvelope
+    connect?: OTPWhereUniqueInput | OTPWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -5117,6 +5256,20 @@ export namespace Prisma {
     deleteMany?: MoodEntryScalarWhereInput | MoodEntryScalarWhereInput[]
   }
 
+  export type OTPUpdateManyWithoutUserNestedInput = {
+    create?: XOR<OTPCreateWithoutUserInput, OTPUncheckedCreateWithoutUserInput> | OTPCreateWithoutUserInput[] | OTPUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OTPCreateOrConnectWithoutUserInput | OTPCreateOrConnectWithoutUserInput[]
+    upsert?: OTPUpsertWithWhereUniqueWithoutUserInput | OTPUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: OTPCreateManyUserInputEnvelope
+    set?: OTPWhereUniqueInput | OTPWhereUniqueInput[]
+    disconnect?: OTPWhereUniqueInput | OTPWhereUniqueInput[]
+    delete?: OTPWhereUniqueInput | OTPWhereUniqueInput[]
+    connect?: OTPWhereUniqueInput | OTPWhereUniqueInput[]
+    update?: OTPUpdateWithWhereUniqueWithoutUserInput | OTPUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: OTPUpdateManyWithWhereWithoutUserInput | OTPUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: OTPScalarWhereInput | OTPScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -5139,6 +5292,20 @@ export namespace Prisma {
     deleteMany?: MoodEntryScalarWhereInput | MoodEntryScalarWhereInput[]
   }
 
+  export type OTPUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<OTPCreateWithoutUserInput, OTPUncheckedCreateWithoutUserInput> | OTPCreateWithoutUserInput[] | OTPUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: OTPCreateOrConnectWithoutUserInput | OTPCreateOrConnectWithoutUserInput[]
+    upsert?: OTPUpsertWithWhereUniqueWithoutUserInput | OTPUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: OTPCreateManyUserInputEnvelope
+    set?: OTPWhereUniqueInput | OTPWhereUniqueInput[]
+    disconnect?: OTPWhereUniqueInput | OTPWhereUniqueInput[]
+    delete?: OTPWhereUniqueInput | OTPWhereUniqueInput[]
+    connect?: OTPWhereUniqueInput | OTPWhereUniqueInput[]
+    update?: OTPUpdateWithWhereUniqueWithoutUserInput | OTPUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: OTPUpdateManyWithWhereWithoutUserInput | OTPUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: OTPScalarWhereInput | OTPScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutMoodEntriesInput = {
     create?: XOR<UserCreateWithoutMoodEntriesInput, UserUncheckedCreateWithoutMoodEntriesInput>
     connectOrCreate?: UserCreateOrConnectWithoutMoodEntriesInput
@@ -5155,6 +5322,20 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutMoodEntriesInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMoodEntriesInput, UserUpdateWithoutMoodEntriesInput>, UserUncheckedUpdateWithoutMoodEntriesInput>
+  }
+
+  export type UserCreateNestedOneWithoutOtpInput = {
+    create?: XOR<UserCreateWithoutOtpInput, UserUncheckedCreateWithoutOtpInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOtpInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutOtpNestedInput = {
+    create?: XOR<UserCreateWithoutOtpInput, UserUncheckedCreateWithoutOtpInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOtpInput
+    upsert?: UserUpsertWithoutOtpInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutOtpInput, UserUpdateWithoutOtpInput>, UserUncheckedUpdateWithoutOtpInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -5320,6 +5501,27 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type OTPCreateWithoutUserInput = {
+    otp: number
+    createdAt?: Date | string
+  }
+
+  export type OTPUncheckedCreateWithoutUserInput = {
+    id?: number
+    otp: number
+    createdAt?: Date | string
+  }
+
+  export type OTPCreateOrConnectWithoutUserInput = {
+    where: OTPWhereUniqueInput
+    create: XOR<OTPCreateWithoutUserInput, OTPUncheckedCreateWithoutUserInput>
+  }
+
+  export type OTPCreateManyUserInputEnvelope = {
+    data: OTPCreateManyUserInput | OTPCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type MoodEntryUpsertWithWhereUniqueWithoutUserInput = {
     where: MoodEntryWhereUniqueInput
     update: XOR<MoodEntryUpdateWithoutUserInput, MoodEntryUncheckedUpdateWithoutUserInput>
@@ -5349,12 +5551,39 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"MoodEntry"> | Date | string
   }
 
+  export type OTPUpsertWithWhereUniqueWithoutUserInput = {
+    where: OTPWhereUniqueInput
+    update: XOR<OTPUpdateWithoutUserInput, OTPUncheckedUpdateWithoutUserInput>
+    create: XOR<OTPCreateWithoutUserInput, OTPUncheckedCreateWithoutUserInput>
+  }
+
+  export type OTPUpdateWithWhereUniqueWithoutUserInput = {
+    where: OTPWhereUniqueInput
+    data: XOR<OTPUpdateWithoutUserInput, OTPUncheckedUpdateWithoutUserInput>
+  }
+
+  export type OTPUpdateManyWithWhereWithoutUserInput = {
+    where: OTPScalarWhereInput
+    data: XOR<OTPUpdateManyMutationInput, OTPUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type OTPScalarWhereInput = {
+    AND?: OTPScalarWhereInput | OTPScalarWhereInput[]
+    OR?: OTPScalarWhereInput[]
+    NOT?: OTPScalarWhereInput | OTPScalarWhereInput[]
+    id?: IntFilter<"OTP"> | number
+    otp?: IntFilter<"OTP"> | number
+    createdAt?: DateTimeFilter<"OTP"> | Date | string
+    userId?: IntFilter<"OTP"> | number
+  }
+
   export type UserCreateWithoutMoodEntriesInput = {
     name: string
     email: string
     password: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    otp?: OTPCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMoodEntriesInput = {
@@ -5364,6 +5593,7 @@ export namespace Prisma {
     password: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    otp?: OTPUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMoodEntriesInput = {
@@ -5388,6 +5618,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    otp?: OTPUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMoodEntriesInput = {
@@ -5397,6 +5628,61 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    otp?: OTPUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutOtpInput = {
+    name: string
+    email: string
+    password: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    moodEntries?: MoodEntryCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutOtpInput = {
+    id?: number
+    name: string
+    email: string
+    password: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    moodEntries?: MoodEntryUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutOtpInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutOtpInput, UserUncheckedCreateWithoutOtpInput>
+  }
+
+  export type UserUpsertWithoutOtpInput = {
+    update: XOR<UserUpdateWithoutOtpInput, UserUncheckedUpdateWithoutOtpInput>
+    create: XOR<UserCreateWithoutOtpInput, UserUncheckedCreateWithoutOtpInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutOtpInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutOtpInput, UserUncheckedUpdateWithoutOtpInput>
+  }
+
+  export type UserUpdateWithoutOtpInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    moodEntries?: MoodEntryUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutOtpInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    moodEntries?: MoodEntryUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type MoodEntryCreateManyUserInput = {
@@ -5406,6 +5692,12 @@ export namespace Prisma {
     note?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type OTPCreateManyUserInput = {
+    id?: number
+    otp: number
+    createdAt?: Date | string
   }
 
   export type MoodEntryUpdateWithoutUserInput = {
@@ -5432,6 +5724,23 @@ export namespace Prisma {
     note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OTPUpdateWithoutUserInput = {
+    otp?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OTPUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    otp?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OTPUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    otp?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import api from "@/config/axios";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "../ui/button";
 
@@ -9,17 +9,36 @@ const PasswordForm = ({}) => {
   const passwordRef = useRef(null);
   const confirmPasswordRef = useRef(null);
 
+  const [notMatch, setNotMatch] = useState(true);
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      const res = await api.post("users/update-password", {
-        password: passwordRef.current.value,
-        confirmPassword: confirmPasswordRef.current.value,
-      });
-      if (res.status === 200) {
-        navigate("/login");
+
+      const passwordValue = passwordRef.current.value;
+      const confirmPasswordValue = confirmPasswordRef.current.value;
+
+      console.log("23", passwordValue === confirmPasswordValue);
+
+      if (passwordValue !== confirmPasswordValue) {
+        setNotMatch(true);
+      } else {
+        setNotMatch(false);
+      }
+      console.log(notMatch);
+
+      if (!notMatch) {
+        const res = await api.post("users/update-password", {
+          password: passwordValue,
+          confirmPassword: confirmPasswordValue,
+        });
+        if (res.status === 200) {
+          navigate("/login");
+        }
+      } else {
+        return;
       }
     } catch (error) {
       console.log(error);
@@ -41,6 +60,9 @@ const PasswordForm = ({}) => {
           required
         />
       </div>
+      {notMatch && (
+        <span className="my-3 italic font-light">Password does not match.</span>
+      )}
       <Button type="submit" className="w-full mt-4">
         Submit
       </Button>

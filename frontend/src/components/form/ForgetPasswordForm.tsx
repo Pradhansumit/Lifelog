@@ -4,11 +4,17 @@ import { Input } from "@/components/ui/input";
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 
-const ForgetPasswordForm = ({ setShowOTP, setShowEmail }) => {
+const ForgetPasswordForm = ({
+  setShowOTP,
+  setShowEmail,
+  setSendEmailWithOTP,
+}) => {
   const emailRef = useRef(null);
+
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
+      setSendEmailWithOTP(emailRef.current.value);
       const res = await api.post("users/forget-password/", {
         email: emailRef.current.value,
       });
@@ -20,6 +26,7 @@ const ForgetPasswordForm = ({ setShowOTP, setShowEmail }) => {
       console.log(error);
     }
   };
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="grid gap-2">

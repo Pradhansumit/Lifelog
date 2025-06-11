@@ -6,19 +6,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useRef, useState } from "react";
-import ForgetPasswordForm from "@/components/form/forgetPasswordForm";
+import { useState } from "react";
+import ForgetPasswordForm from "@/components/form/ForgetPasswordForm";
 import OtpForm from "@/components/form/OtpForm";
 import PasswordForm from "@/components/form/PasswordForm";
 
 const ForgotPassword = () => {
-  const emailRef = useRef(null);
-  const otpRef = useRef(null);
-  const passwordRef = useRef(null);
-  const confirmPasswordRef = useRef(null);
-
+  const [sendEmailWithOTP, setSendEmailWithOTP] = useState("");
   const [showOTP, setShowOTP] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showEmail, setShowEmail] = useState(true);
@@ -38,12 +32,14 @@ const ForgotPassword = () => {
               <ForgetPasswordForm
                 setShowOTP={setShowOTP}
                 setShowEmail={setShowEmail}
+                setSendEmailWithOTP={setSendEmailWithOTP}
               />
             )}
             {showOTP && (
               <OtpForm
                 setShowOTP={setShowOTP}
                 setShowPassword={setShowPassword}
+                sendEmailWithOTP={sendEmailWithOTP}
               />
             )}
             {showPassword && <PasswordForm />}

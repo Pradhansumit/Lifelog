@@ -8,12 +8,15 @@ import api from "@/config/axios";
 import { useState } from "react";
 import { Button } from "../ui/button";
 
-const OtpForm = ({ setShowOTP, setShowPassword }) => {
+const OtpForm = ({ setShowOTP, setShowPassword, sendEmailWithOTP }) => {
   const [otp, setOtp] = useState("");
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      const res = await api.post("users/verify-otp", { otp });
+      const res = await api.post("users/verify-otp", {
+        email: sendEmailWithOTP,
+        otp: otp,
+      });
       if (res.status === 200) {
         setShowOTP(false);
         setShowPassword(true);

@@ -5,7 +5,9 @@ import bcrypt from "bcrypt";
 const jwt = require("jsonwebtoken");
 
 const userClient = new PrismaClient().user;
-const otpClient = new PrismaClient().oTP;
+const otpClient = new PrismaClient({
+  log: ["query", "info", "warn", "error"],
+}).oTP;
 
 // ------------ BASIC CRUD ------------
 
@@ -138,7 +140,7 @@ export const emailForForgetPassword = async (req, res) => {
     }
     const otp = Math.floor(Math.random() * 1000000);
     const otpQuery = await otpClient.create({
-      data: { email: email, otp: otp },
+      data: { userId: user.id, otp: otp },
     });
     // logic for sending the opt to the email
     const isSent = sendEmail(email, otp);
@@ -155,14 +157,37 @@ export const emailForForgetPassword = async (req, res) => {
   }
 };
 
+const isOTPExpired = (otpTime: Date): boolean => {
+  const createdAt = new Date(otpTime);
+  const now = new Date();
+  const diffInMins = (now.getTime() - createdAt.getTime()) / 1000 / 60;
+  return diffInMins > 15; // expiry time should be 15 mins
+};
+
 // VALIDATING OTP
 export const optVerification = async (req, res) => {
   try {
     const { email, otp } = req.body;
-    const validOTP = otpClient.findFirst({ where: { email: email, otp: otp } });
+
+    const user = await userClient.findFirst({ where: { email } });
+    if (!user) {
+      return res.status(404).json({ message: "Email not found." });
+    }
+    console.log(user.id);
+
+    const validOTP = await otpClient.findFirst({
+      where: { userId: user.id, otp: parseInt(otp) },
+    });
+
     if (!validOTP) {
       return res.status(404).json({ message: "OTP is not valid." });
     }
+
+    const isotpexp = isOTPExpired(validOTP.createdAt);
+    if (isotpexp) {
+      return res.status(404).json({ message: "OTP has been expired." });
+    }
+
     return res.status(200).json({ message: "Valid OTP." });
   } catch (error) {
     console.log(error);
