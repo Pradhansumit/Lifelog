@@ -1,3 +1,4 @@
+import "./tasks/deleteOldOtps";
 require("dotenv").config();
 
 const express = require("express");
