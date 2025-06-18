@@ -1,5 +1,14 @@
+import Sidebar from "@/components/Sidebar";
+import BlogEntry from "@/components/Main/BlogEntry";
+
 const Dashboard = () => {
-  return <div>Dashboard</div>;
+  return (
+    <>
+      <Sidebar>
+        <BlogEntry></BlogEntry>
+      </Sidebar>
+    </>
+  );
 };
 
 export default Dashboard;
