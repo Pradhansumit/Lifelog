@@ -1,3 +1,4 @@
+import api from "@/config/axios";
 import {
   Home,
   ChevronLeft,
@@ -9,6 +10,7 @@ import {
   Settings,
 } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 const Sidebar = ({ children }) => {
   const [expanded, setExpanded] = useState(true);
@@ -22,9 +24,14 @@ const Sidebar = ({ children }) => {
     { name: "Export", icon: <Download size={23} /> },
   ];
 
-  const handleLogout = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
     try {
-      console.log("hello world");
+      const res = await api.get("users/logout/");
+      if (res.status === 200) {
+        navigate("/login");
+      }
     } catch (error) {
       console.log(error);
     }
