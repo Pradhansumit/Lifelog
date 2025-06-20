@@ -30,6 +30,7 @@ const Sidebar = ({ children }) => {
     try {
       const res = await api.get("users/logout/");
       if (res.status === 200) {
+        localStorage.removeItem("token");
         navigate("/login");
       }
     } catch (error) {

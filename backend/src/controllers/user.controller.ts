@@ -78,6 +78,7 @@ export const loginUser = async (req, res) => {
         createdAt: user.createdAt,
       },
       secret_key,
+      { expiresIn: 5000 },
     );
     res.cookie("jwt_token", token);
     return res.status(200).json({ message: "Login Successful." });

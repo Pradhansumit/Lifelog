@@ -31,7 +31,7 @@ export default function Login() {
       });
       console.log(res);
       if (res.status === 200) {
-        navigate("/dashboard/");
+        navigate("/");
       }
     } catch (error) {
       console.log(error);

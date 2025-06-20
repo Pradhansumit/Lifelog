@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router";
 import Register from "@/page/Register";
 import Dashboard from "@/page/Dashboard";
 import ForgotPassword from "@/page/ForgotPassword";
+import PrivateRoute from "@/components/authentication/PrivateRoute";
 
 function App() {
   return (
@@ -10,8 +11,22 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/forget-password" element={<ForgotPassword />} />
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/forget-password"
+          element={
+            <PrivateRoute>
+              <ForgotPassword />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
