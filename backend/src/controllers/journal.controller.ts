@@ -43,6 +43,27 @@ export const createEntry = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User does not exist." });
     }
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const entryExist = await prisma.moodEntry.findFirst({
+      where: {
+        userId: user.id,
+        createdAt: {
+          gte: startOfDay,
+          lte: endOfDay,
+        },
+      },
+    });
+
+    if (entryExist) {
+      return res
+        .status(403)
+        .json({ message: "You have already did your blog entry." });
+    }
 
     const entry = await prisma.moodEntry.create({
       data: {

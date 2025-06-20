@@ -19,9 +19,7 @@ export default function BlogEntry() {
 
   const handleSubmit = async () => {
     if (!selectedMood) return alert("Pick a mood!");
-
     const listOfCookie = document.cookie.split(";");
-
     let token = "";
 
     listOfCookie.forEach((element) => {
@@ -31,17 +29,21 @@ export default function BlogEntry() {
     });
 
     const decoded = jwtDecode(token);
-
-    const res = await api.post("/entry/create/", {
-      user: decoded.email,
-      mood: selectedMood,
-      note: note,
-    });
-    if (res.status === 201) {
-      alert("Done");
+    try {
+      const res = await api.post("/entry/create/", {
+        user: decoded.email,
+        mood: selectedMood,
+        note: note,
+      });
+      if (res.status === 201) {
+        alert("Done");
+      }
+    } catch (error) {
+      console.log(error);
+      if (error.response.status === 403) {
+        alert("You have already added to today's journal");
+      }
     }
-
-    console.log(res.data);
   };
 
   return (
