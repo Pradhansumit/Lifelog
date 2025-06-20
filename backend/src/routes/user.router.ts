@@ -17,9 +17,9 @@ import {
 const userRouter = Router();
 
 userRouter.get("/", requireAuth, getAllUsers);
-userRouter.get("/user/:id", getUserById);
-userRouter.put("/:id", updateUser);
-userRouter.delete("/:id", deleteUser);
+userRouter.get("/user/:id", requireAuth, getUserById);
+userRouter.put("/:id", requireAuth, updateUser);
+userRouter.delete("/:id", requireAuth, deleteUser);
 
 // endpoints for user creation and authentication
 userRouter.post("/register/", registerUser);

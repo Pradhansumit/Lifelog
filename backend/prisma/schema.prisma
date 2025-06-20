@@ -1,7 +1,7 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions? 
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
@@ -29,7 +29,6 @@ model User {
 model MoodEntry {
   id        Int      @id @default(autoincrement())
   userId    Int
-  date      DateTime
   mood      String
   note      String?
   createdAt DateTime @default(now())
@@ -37,7 +36,7 @@ model MoodEntry {
 
   User User @relation(fields: [userId], references: [id])
 
-  @@unique([userId, date])
+  @@unique([userId])
 }
 
 model OTP {

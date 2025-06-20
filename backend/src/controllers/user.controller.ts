@@ -61,12 +61,15 @@ export const deleteUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await prisma.user.findFirst({ where: { email: email } });
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password required." });
+    }
+    const user = await prisma.user.findUnique({ where: { email: email } });
     if (!user) {
       return res.status(404).json({ message: "Email not found." });
     }
     const isValid = await bcrypt.compare(password, user.password);
-    if (isValid!) {
+    if (!isValid) {
       return res.status(404).json({ message: "Password is not correct." });
     }
     const secret_key = process.env.JWT_SECRET_KEY;

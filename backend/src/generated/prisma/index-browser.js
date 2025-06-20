@@ -132,7 +132,6 @@ exports.Prisma.UserScalarFieldEnum = {
 exports.Prisma.MoodEntryScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  date: 'date',
   mood: 'mood',
   note: 'note',
   createdAt: 'createdAt',

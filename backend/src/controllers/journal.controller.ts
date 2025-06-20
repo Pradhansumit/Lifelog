@@ -30,22 +30,42 @@ export const getEntryById = async (req, res) => {
 // ADD/CREATE MOOD ENTRY
 export const createEntry = async (req, res) => {
   try {
-    const entryData = req.body;
-    entryData.date = new Date(entryData.date);
+    const { user: userEmail, mood, note } = req.body;
+
+    if (!userEmail || !mood) {
+      return res.status(400).json({ message: "Missing required fields." });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email: userEmail },
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User does not exist." });
+    }
 
     const entry = await prisma.moodEntry.create({
-      data: entryData,
+      data: {
+        userId: user.id,
+        mood,
+        note,
+      },
     });
+
     return res.status(201).json({
       id: entry.id,
-      date: entry.date,
       mood: entry.mood,
       note: entry.note,
       createdAt: entry.createdAt,
     });
-  } catch (error) {
-    console.log(error.message);
-    return res.status(500).json({ message: "Internal server error" });
+  } catch (error: any) {
+    console.error("❌ Error while creating mood entry:");
+    console.dir(error, { depth: null });
+
+    return res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message || "Unknown error",
+    });
   }
 };
 
@@ -64,7 +84,6 @@ export const updateEntry = async (req, res) => {
     return res.status(200).json({
       data: {
         id: updateEntry.id,
-        date: updateEntry.date,
         mood: updateEntry.mood,
         note: updateEntry.note,
         createdAt: updateEntry.createdAt,

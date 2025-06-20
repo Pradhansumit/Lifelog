@@ -2260,7 +2260,6 @@ export namespace Prisma {
   export type MoodEntryMinAggregateOutputType = {
     id: number | null
     userId: number | null
-    date: Date | null
     mood: string | null
     note: string | null
     createdAt: Date | null
@@ -2270,7 +2269,6 @@ export namespace Prisma {
   export type MoodEntryMaxAggregateOutputType = {
     id: number | null
     userId: number | null
-    date: Date | null
     mood: string | null
     note: string | null
     createdAt: Date | null
@@ -2280,7 +2278,6 @@ export namespace Prisma {
   export type MoodEntryCountAggregateOutputType = {
     id: number
     userId: number
-    date: number
     mood: number
     note: number
     createdAt: number
@@ -2302,7 +2299,6 @@ export namespace Prisma {
   export type MoodEntryMinAggregateInputType = {
     id?: true
     userId?: true
-    date?: true
     mood?: true
     note?: true
     createdAt?: true
@@ -2312,7 +2308,6 @@ export namespace Prisma {
   export type MoodEntryMaxAggregateInputType = {
     id?: true
     userId?: true
-    date?: true
     mood?: true
     note?: true
     createdAt?: true
@@ -2322,7 +2317,6 @@ export namespace Prisma {
   export type MoodEntryCountAggregateInputType = {
     id?: true
     userId?: true
-    date?: true
     mood?: true
     note?: true
     createdAt?: true
@@ -2419,7 +2413,6 @@ export namespace Prisma {
   export type MoodEntryGroupByOutputType = {
     id: number
     userId: number
-    date: Date
     mood: string
     note: string | null
     createdAt: Date
@@ -2448,7 +2441,6 @@ export namespace Prisma {
   export type MoodEntrySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
-    date?: boolean
     mood?: boolean
     note?: boolean
     createdAt?: boolean
@@ -2459,7 +2451,6 @@ export namespace Prisma {
   export type MoodEntrySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
-    date?: boolean
     mood?: boolean
     note?: boolean
     createdAt?: boolean
@@ -2470,7 +2461,6 @@ export namespace Prisma {
   export type MoodEntrySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
-    date?: boolean
     mood?: boolean
     note?: boolean
     createdAt?: boolean
@@ -2481,14 +2471,13 @@ export namespace Prisma {
   export type MoodEntrySelectScalar = {
     id?: boolean
     userId?: boolean
-    date?: boolean
     mood?: boolean
     note?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type MoodEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "date" | "mood" | "note" | "createdAt" | "updatedAt", ExtArgs["result"]["moodEntry"]>
+  export type MoodEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "mood" | "note" | "createdAt" | "updatedAt", ExtArgs["result"]["moodEntry"]>
   export type MoodEntryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     User?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -2507,7 +2496,6 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       userId: number
-      date: Date
       mood: string
       note: string | null
       createdAt: Date
@@ -2938,7 +2926,6 @@ export namespace Prisma {
   interface MoodEntryFieldRefs {
     readonly id: FieldRef<"MoodEntry", 'Int'>
     readonly userId: FieldRef<"MoodEntry", 'Int'>
-    readonly date: FieldRef<"MoodEntry", 'DateTime'>
     readonly mood: FieldRef<"MoodEntry", 'String'>
     readonly note: FieldRef<"MoodEntry", 'String'>
     readonly createdAt: FieldRef<"MoodEntry", 'DateTime'>
@@ -4473,7 +4460,6 @@ export namespace Prisma {
   export const MoodEntryScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
-    date: 'date',
     mood: 'mood',
     note: 'note',
     createdAt: 'createdAt',
@@ -4652,7 +4638,6 @@ export namespace Prisma {
     NOT?: MoodEntryWhereInput | MoodEntryWhereInput[]
     id?: IntFilter<"MoodEntry"> | number
     userId?: IntFilter<"MoodEntry"> | number
-    date?: DateTimeFilter<"MoodEntry"> | Date | string
     mood?: StringFilter<"MoodEntry"> | string
     note?: StringNullableFilter<"MoodEntry"> | string | null
     createdAt?: DateTimeFilter<"MoodEntry"> | Date | string
@@ -4663,7 +4648,6 @@ export namespace Prisma {
   export type MoodEntryOrderByWithRelationInput = {
     id?: SortOrder
     userId?: SortOrder
-    date?: SortOrder
     mood?: SortOrder
     note?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -4673,23 +4657,20 @@ export namespace Prisma {
 
   export type MoodEntryWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    userId_date?: MoodEntryUserIdDateCompoundUniqueInput
+    userId?: number
     AND?: MoodEntryWhereInput | MoodEntryWhereInput[]
     OR?: MoodEntryWhereInput[]
     NOT?: MoodEntryWhereInput | MoodEntryWhereInput[]
-    userId?: IntFilter<"MoodEntry"> | number
-    date?: DateTimeFilter<"MoodEntry"> | Date | string
     mood?: StringFilter<"MoodEntry"> | string
     note?: StringNullableFilter<"MoodEntry"> | string | null
     createdAt?: DateTimeFilter<"MoodEntry"> | Date | string
     updatedAt?: DateTimeFilter<"MoodEntry"> | Date | string
     User?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }, "id" | "userId_date">
+  }, "id" | "userId">
 
   export type MoodEntryOrderByWithAggregationInput = {
     id?: SortOrder
     userId?: SortOrder
-    date?: SortOrder
     mood?: SortOrder
     note?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -4707,7 +4688,6 @@ export namespace Prisma {
     NOT?: MoodEntryScalarWhereWithAggregatesInput | MoodEntryScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"MoodEntry"> | number
     userId?: IntWithAggregatesFilter<"MoodEntry"> | number
-    date?: DateTimeWithAggregatesFilter<"MoodEntry"> | Date | string
     mood?: StringWithAggregatesFilter<"MoodEntry"> | string
     note?: StringNullableWithAggregatesFilter<"MoodEntry"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"MoodEntry"> | Date | string
@@ -4835,7 +4815,6 @@ export namespace Prisma {
   }
 
   export type MoodEntryCreateInput = {
-    date: Date | string
     mood: string
     note?: string | null
     createdAt?: Date | string
@@ -4846,7 +4825,6 @@ export namespace Prisma {
   export type MoodEntryUncheckedCreateInput = {
     id?: number
     userId: number
-    date: Date | string
     mood: string
     note?: string | null
     createdAt?: Date | string
@@ -4854,7 +4832,6 @@ export namespace Prisma {
   }
 
   export type MoodEntryUpdateInput = {
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
     mood?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -4865,7 +4842,6 @@ export namespace Prisma {
   export type MoodEntryUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     userId?: IntFieldUpdateOperationsInput | number
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
     mood?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -4875,7 +4851,6 @@ export namespace Prisma {
   export type MoodEntryCreateManyInput = {
     id?: number
     userId: number
-    date: Date | string
     mood: string
     note?: string | null
     createdAt?: Date | string
@@ -4883,7 +4858,6 @@ export namespace Prisma {
   }
 
   export type MoodEntryUpdateManyMutationInput = {
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
     mood?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -4893,7 +4867,6 @@ export namespace Prisma {
   export type MoodEntryUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     userId?: IntFieldUpdateOperationsInput | number
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
     mood?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -5110,15 +5083,9 @@ export namespace Prisma {
     nulls?: NullsOrder
   }
 
-  export type MoodEntryUserIdDateCompoundUniqueInput = {
-    userId: number
-    date: Date | string
-  }
-
   export type MoodEntryCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
-    date?: SortOrder
     mood?: SortOrder
     note?: SortOrder
     createdAt?: SortOrder
@@ -5133,7 +5100,6 @@ export namespace Prisma {
   export type MoodEntryMaxOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
-    date?: SortOrder
     mood?: SortOrder
     note?: SortOrder
     createdAt?: SortOrder
@@ -5143,7 +5109,6 @@ export namespace Prisma {
   export type MoodEntryMinOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
-    date?: SortOrder
     mood?: SortOrder
     note?: SortOrder
     createdAt?: SortOrder
@@ -5475,7 +5440,6 @@ export namespace Prisma {
   }
 
   export type MoodEntryCreateWithoutUserInput = {
-    date: Date | string
     mood: string
     note?: string | null
     createdAt?: Date | string
@@ -5484,7 +5448,6 @@ export namespace Prisma {
 
   export type MoodEntryUncheckedCreateWithoutUserInput = {
     id?: number
-    date: Date | string
     mood: string
     note?: string | null
     createdAt?: Date | string
@@ -5544,7 +5507,6 @@ export namespace Prisma {
     NOT?: MoodEntryScalarWhereInput | MoodEntryScalarWhereInput[]
     id?: IntFilter<"MoodEntry"> | number
     userId?: IntFilter<"MoodEntry"> | number
-    date?: DateTimeFilter<"MoodEntry"> | Date | string
     mood?: StringFilter<"MoodEntry"> | string
     note?: StringNullableFilter<"MoodEntry"> | string | null
     createdAt?: DateTimeFilter<"MoodEntry"> | Date | string
@@ -5687,7 +5649,6 @@ export namespace Prisma {
 
   export type MoodEntryCreateManyUserInput = {
     id?: number
-    date: Date | string
     mood: string
     note?: string | null
     createdAt?: Date | string
@@ -5701,7 +5662,6 @@ export namespace Prisma {
   }
 
   export type MoodEntryUpdateWithoutUserInput = {
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
     mood?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -5710,7 +5670,6 @@ export namespace Prisma {
 
   export type MoodEntryUncheckedUpdateWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
     mood?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -5719,7 +5678,6 @@ export namespace Prisma {
 
   export type MoodEntryUncheckedUpdateManyWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
     mood?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

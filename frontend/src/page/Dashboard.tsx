@@ -5,7 +5,9 @@ const Dashboard = () => {
   return (
     <>
       <Sidebar>
-        <BlogEntry></BlogEntry>
+        <main className="p-4 bg-slate-100 rounded-2xl ">
+          <BlogEntry></BlogEntry>
+        </main>
       </Sidebar>
     </>
   );

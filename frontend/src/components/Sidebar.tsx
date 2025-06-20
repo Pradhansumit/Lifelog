@@ -13,7 +13,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 
 const Sidebar = ({ children }) => {
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState("Home"); // default active
 
@@ -140,7 +140,7 @@ const Sidebar = ({ children }) => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-6 bg-background text-foreground">{children}</div>
+      <div className="flex-1 p-4 bg-slate-300 text-foreground">{children}</div>
     </div>
   );
 };

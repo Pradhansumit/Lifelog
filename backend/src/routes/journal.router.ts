@@ -7,13 +7,21 @@ import {
   deleteEntry,
   updateEntry,
 } from "../controllers/journal.controller";
+import requireAuth from "../middleware/authMiddleware";
 
 const journalRouter = Router();
 
-journalRouter.get("/", getAllEntries);
-journalRouter.get("/entry/:id", getEntryById);
+//main routing is /api/entry/<create|delete/:id|update/:id>
+
+//get all entries
+journalRouter.get("/", requireAuth, getAllEntries);
+//get specific entry
+journalRouter.get("/entry/:id", requireAuth, getEntryById);
+//create entry
 journalRouter.post("/create/", createEntry);
-journalRouter.delete("/delete/:id", deleteEntry);
-journalRouter.post("/update/:id", updateEntry);
+//delete entry
+journalRouter.delete("/delete/:id", requireAuth, deleteEntry);
+//update entry
+journalRouter.post("/update/:id", requireAuth, updateEntry);
 
 export default journalRouter;
