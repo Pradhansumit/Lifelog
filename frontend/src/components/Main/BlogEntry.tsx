@@ -46,6 +46,12 @@ export default function BlogEntry() {
     }
   };
 
+  const handleInput = (e) => {
+    e.target.style.height = "auto";
+    e.target.style.height = `${e.target.scrollHeight}px`;
+    +"px";
+  };
+
   return (
     <div className="p-4 bg-white rounded-xl shadow-md">
       <h1 className="text-4xl font-semibold mb-5">
@@ -79,8 +85,19 @@ export default function BlogEntry() {
         placeholder="Want to add a note?"
         value={note}
         onChange={(e) => setNote(e.target.value)}
-        className="w-5/12 min-h-2/5 block border p-2 rounded mb-2 "
+        className="w-full md:w-xl h-20 block border p-2 rounded mb-2"
+        maxLength={255}
+        onInput={handleInput}
       />
+      <div className="flex justify-end w-full md:w-xl mb-3 text-sm">
+        <span
+          className={`${
+            note.length > 240 ? "text-red-400 font-semibold" : "text-gray-400"
+          }`}
+        >
+          {note.length} / 255
+        </span>
+      </div>
       <Button onClick={handleSubmit} className="text-white px-4 py-2 rounded">
         Submit
       </Button>
