@@ -4,11 +4,11 @@ import { jwtDecode } from "jwt-decode";
 import api from "@/config/axios";
 
 const moods = [
-  { value: "happy", emoji: "😊" },
+  { value: "happy", emoji: "😍" },
   { value: "good", emoji: "🙂" },
   { value: "neutral", emoji: "😐" },
-  { value: "sad", emoji: "😢" },
-  { value: "angry", emoji: "😠" },
+  { value: "sad", emoji: "😭" },
+  { value: "angry", emoji: "😡" },
 ];
 
 export default function BlogEntry() {
