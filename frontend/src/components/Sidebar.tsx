@@ -12,10 +12,9 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
-const Sidebar = ({ children }) => {
+const Sidebar = ({ activeMenu, setActiveMenu, children }) => {
   const [expanded, setExpanded] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [activeMenu, setActiveMenu] = useState("Home"); // default active
 
   const menuItems = [
     { name: "Home", icon: <Home size={23} /> },
