@@ -11,6 +11,35 @@ export const getAllEntries = async (req, res) => {
   }
 };
 
+// GET ALL MOOD ENTRIES FOR PARTICULAR USERS
+export const getAllUserEntries = async (req, res) => {
+  try {
+    const { user: userEmail } = req.body;
+
+    if (!userEmail) {
+      return res.status(400).json({ message: "Missing required fields." });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email: userEmail },
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User does not exist." });
+    }
+
+    const entries = await prisma.moodEntry.findMany({
+      where: {
+        userId: user.id,
+      },
+    });
+    return res.status(200).json({ data: entries });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 // GET ONE MOOD ENTRY
 export const getEntryById = async (req, res) => {
   try {

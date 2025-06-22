@@ -4657,16 +4657,16 @@ export namespace Prisma {
 
   export type MoodEntryWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    userId?: number
     AND?: MoodEntryWhereInput | MoodEntryWhereInput[]
     OR?: MoodEntryWhereInput[]
     NOT?: MoodEntryWhereInput | MoodEntryWhereInput[]
+    userId?: IntFilter<"MoodEntry"> | number
     mood?: StringFilter<"MoodEntry"> | string
     note?: StringNullableFilter<"MoodEntry"> | string | null
     createdAt?: DateTimeFilter<"MoodEntry"> | Date | string
     updatedAt?: DateTimeFilter<"MoodEntry"> | Date | string
     User?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }, "id" | "userId">
+  }, "id">
 
   export type MoodEntryOrderByWithAggregationInput = {
     id?: SortOrder

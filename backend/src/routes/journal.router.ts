@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import {
   getAllEntries,
+  getAllUserEntries,
   getEntryById,
   createEntry,
   deleteEntry,
@@ -15,6 +16,8 @@ const journalRouter = Router();
 
 //get all entries
 journalRouter.get("/", requireAuth, getAllEntries);
+//get all user based entries
+journalRouter.post("/getuserentries", requireAuth, getAllUserEntries);
 //get specific entry
 journalRouter.get("/entry/:id", requireAuth, getEntryById);
 //create entry

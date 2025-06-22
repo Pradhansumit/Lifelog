@@ -35,8 +35,6 @@ model MoodEntry {
   updatedAt DateTime @updatedAt
 
   User User @relation(fields: [userId], references: [id])
-
-  @@unique([userId])
 }
 
 model OTP {
