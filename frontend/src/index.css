@@ -131,3 +131,12 @@
 * {
   font-family: "Roboto Slab", serif;
 }
+
+.fc-event {
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.fc-event:hover {
+  transform: scale(1.02);
+}

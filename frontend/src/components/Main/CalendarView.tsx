@@ -15,37 +15,28 @@ const moodColors = {
 };
 
 const CalendarView = () => {
-  const [moodMap, setMoodMap] = useState({});
+  const [events, setEvents] = useState([]);
   const [selectedEntry, setSelectedEntry] = useState(null);
-
-  const handleDateClick = (arg) => {
-    const dateStr = arg.dateStr;
-    const entry = moodMap[dateStr];
-    if (entry) {
-      setSelectedEntry({ ...entry, date: dateStr });
-    } else {
-      setSelectedEntry(null);
-    }
-  };
 
   const apiEntries = async () => {
     try {
       const userEmail = getUserEmailFromToken();
       const res = await api.post("/entry/getuserentries/", { user: userEmail });
       const moodEntries = res.data.data;
-      console.log(moodEntries);
 
-      const map = {};
-      moodEntries.forEach((entry) => {
-        const date = entry.createdAt.split("T")[0];
-        map[date] = {
-          mood: entry.mood,
+      const formattedEvents = moodEntries.map((entry) => ({
+        title: entry.mood,
+        date: entry.createdAt.split("T")[0],
+        backgroundColor: moodColors[entry.mood],
+        borderColor: moodColors[entry.mood],
+        textColor: "#fff",
+        extendedProps: {
           note: entry.note,
           createdAt: entry.createdAt,
-        };
-      });
+        },
+      }));
 
-      setMoodMap(map);
+      setEvents(formattedEvents);
     } catch (error) {
       console.log(error);
     }
@@ -55,28 +46,21 @@ const CalendarView = () => {
     apiEntries();
   }, []);
 
-  const dayCellDidMount = (arg) => {
-    const dateStr = arg.date.toISOString().split("T")[0];
-    const entry = moodMap[dateStr];
-
-    if (entry && entry.mood && moodColors[entry.mood]) {
-      arg.el.style.backgroundColor = moodColors[entry.mood];
-      arg.el.style.color = "white";
-    } else {
-      // ❗ Optional: reset cell style if no mood exists
-      arg.el.style.backgroundColor = "";
-      arg.el.style.color = "";
-    }
-  };
-
   return (
     <div>
       <FullCalendar
-        key={Object.keys(moodMap).join(",")}
+        key={events.length}
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
-        dayCellDidMount={dayCellDidMount}
-        dateClick={handleDateClick}
+        events={events}
+        eventClick={(info) => {
+          const { title, startStr, extendedProps } = info.event;
+          setSelectedEntry({
+            mood: title,
+            note: extendedProps.note,
+            date: startStr,
+          });
+        }}
       />
 
       <CalendarColors />
