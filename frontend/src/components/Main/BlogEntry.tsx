@@ -53,7 +53,7 @@ export default function BlogEntry() {
   };
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex min-h-[calc(100vh-80px)] items-center justify-center">
       <div className="p-4 bg-white rounded-xl shadow-md">
         <h1 className="text-4xl font-semibold mb-5">
           How are you feeling today?

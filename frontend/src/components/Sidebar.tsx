@@ -38,10 +38,10 @@ const Sidebar = ({ activeMenu, setActiveMenu, children }) => {
   };
 
   return (
-    <div className="flex">
+    <div className="flex h-screen overflow-hidden">
       {/* Sidebar */}
       <div
-        className={`h-screen border-r transition-all duration-300 bg-muted text-muted-foreground flex flex-col justify-between ${
+        className={`h-full border-r transition-all duration-300 bg-muted text-muted-foreground flex flex-col justify-between ${
           expanded ? "w-64" : "w-16"
         }`}
       >
@@ -139,7 +139,9 @@ const Sidebar = ({ activeMenu, setActiveMenu, children }) => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-4 bg-slate-300 text-foreground">{children}</div>
+      <div className="flex-1 overflow-y-auto p-4 bg-slate-300 text-foreground">
+        {children}
+      </div>
     </div>
   );
 };
