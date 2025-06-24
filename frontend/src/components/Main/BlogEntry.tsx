@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { jwtDecode } from "jwt-decode";
 import api from "@/config/axios";
+import { useNavigate } from "react-router";
 
 const moods = [
   { value: "happy", emoji: "😍" },
@@ -14,6 +15,8 @@ const moods = [
 export default function BlogEntry() {
   const [selectedMood, setSelectedMood] = useState(null);
   const [note, setNote] = useState("");
+
+  const navigate = useNavigate();
 
   const today = new Date();
 
@@ -37,6 +40,7 @@ export default function BlogEntry() {
       });
       if (res.status === 201) {
         alert("Done");
+        navigate("/");
       }
     } catch (error) {
       console.log(error);
