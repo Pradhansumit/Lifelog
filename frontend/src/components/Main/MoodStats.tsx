@@ -103,7 +103,7 @@ const MoodStats = () => {
 
   return (
     <div className="flex flex-col">
-      <h2 className="text-2xl font-semibold mb-4">Mood Summary</h2>
+      <h2 className="text-3xl mb-4">Mood Summary</h2>
       <div className="flex flex-1/2 mb-5">
         {/* Pie Chart */}
         {chartData.pie.length > 0 ? (

@@ -7,6 +7,7 @@ import {
   createEntry,
   deleteEntry,
   updateEntry,
+  getUserEntriesByDate,
 } from "../controllers/journal.controller";
 import requireAuth from "../middleware/authMiddleware";
 
@@ -18,6 +19,8 @@ const journalRouter = Router();
 journalRouter.get("/", requireAuth, getAllEntries);
 //get all user based entries
 journalRouter.post("/getuserentries", requireAuth, getAllUserEntries);
+// get user entries based on dates
+journalRouter.post("/getuserentriesbydate", requireAuth, getUserEntriesByDate);
 //get specific entry
 journalRouter.get("/entry/:id", requireAuth, getEntryById);
 //create entry

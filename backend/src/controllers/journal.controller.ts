@@ -40,6 +40,39 @@ export const getAllUserEntries = async (req, res) => {
   }
 };
 
+// GET USER ENTRIES FOR SPECIFIC DATE RANGE
+export const getUserEntriesByDate = async (req, res) => {
+  const { user: userEmail, startDate, endDate } = req.body;
+
+  if (!userEmail) {
+    return res.status(400).json({ message: "Missing required fields." });
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { email: userEmail },
+  });
+
+  if (!user) {
+    return res.status(404).json({ message: "User does not exist." });
+  }
+
+  let startDateFromMid = new Date(startDate);
+  startDateFromMid.setHours(0, 0, 0, 0);
+  let endDateTillMid = new Date(endDate);
+  endDateTillMid.setHours(23, 59, 59, 999);
+
+  const entries = await prisma.moodEntry.findMany({
+    where: {
+      userId: user.id,
+      createdAt: {
+        gte: startDateFromMid,
+        lte: endDateTillMid,
+      },
+    },
+  });
+  return res.status(200).json({ data: entries });
+};
+
 // GET ONE MOOD ENTRY
 export const getEntryById = async (req, res) => {
   try {

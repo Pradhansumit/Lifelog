@@ -5,7 +5,6 @@ import { useEffect } from "react";
 const checkTokenValidity = (token: string) => {
   try {
     const decoded = jwtDecode(token);
-    console.log(decoded.exp * 1000 > Date.now());
     return decoded.exp * 1000 > Date.now();
   } catch (e) {
     return false;
