@@ -1,4 +1,5 @@
 import api from "@/config/axios";
+import { jwtDecode } from "jwt-decode";
 import {
   Home,
   ChevronLeft,
@@ -9,12 +10,13 @@ import {
   LogOut,
   Settings,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 const Sidebar = ({ activeMenu, setActiveMenu, children }) => {
   const [expanded, setExpanded] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [userInfo, setUserInfo] = useState({});
 
   const menuItems = [
     { name: "Home", icon: <Home size={23} /> },
@@ -36,6 +38,19 @@ const Sidebar = ({ activeMenu, setActiveMenu, children }) => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    const listOfCookie = document.cookie.split(";");
+    let token = "";
+
+    listOfCookie.forEach((element) => {
+      if (element.trim().startsWith("jwt_token")) {
+        token = element.trim().split("=")[1];
+      }
+    });
+
+    setUserInfo(jwtDecode(token));
+  }, []);
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -105,13 +120,12 @@ const Sidebar = ({ activeMenu, setActiveMenu, children }) => {
                 className="w-8 h-8 rounded-full"
               />
               {expanded && (
-                <div className="flex flex-col">
+                <div className="flex flex-col overflow-hidden">
                   <span className="text-sm font-medium text-foreground">
-                    John Doe
+                    {console.log(userInfo)}
+                    {userInfo.name}
                   </span>
-                  <span className="text-sm font-medium">
-                    johndoe@gmail.com{" "}
-                  </span>
+                  <span className="text-sm font-medium">{userInfo.email}</span>
                 </div>
               )}
             </div>
@@ -121,12 +135,12 @@ const Sidebar = ({ activeMenu, setActiveMenu, children }) => {
           {dropdownOpen && (
             <div
               className={`absolute bottom-14 left-3 bg-popover border border-border rounded-md shadow-md text-sm w-48 z-10 ${
-                !expanded ? "left-16 w-40" : ""
+                !expanded ? "left-5 w-40" : "bottom-18"
               }`}
             >
-              <div className="flex items-center px-4 py-2 hover:bg-muted cursor-pointer gap-2">
+              {/* <div className="flex items-center px-4 py-2 hover:bg-muted cursor-pointer gap-2">
                 <Settings size={18} /> <span>Settings</span>
-              </div>
+              </div> */}
               <div
                 className="flex items-center px-4 py-2 hover:bg-muted cursor-pointer gap-2 text-destructive"
                 onClick={handleLogout}
