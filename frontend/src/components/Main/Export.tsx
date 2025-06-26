@@ -1,5 +1,5 @@
 import { Button } from "../ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import getUserEmailFromToken from "@/utils/userInfoToken";
 import { ChevronDownIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
@@ -11,8 +11,79 @@ import {
 } from "@/components/ui/popover";
 import api from "@/config/axios";
 
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  PDFViewer,
+  PDFDownloadLink,
+} from "@react-pdf/renderer";
+
+// Styles for the PDF
+const styles = StyleSheet.create({
+  page: { padding: 20 },
+  table: {
+    display: "table",
+    width: "auto",
+    borderStyle: "solid",
+    borderWidth: 1,
+    borderRightWidth: 0,
+    borderBottomWidth: 0,
+  },
+  row: { flexDirection: "row" },
+  title: {
+    fontSize: "24px",
+    textAlign: "center",
+    textDecorationStyle: "solid",
+    paddingBottom: "10px",
+  },
+  heading: {
+    fontSize: "16px",
+    textAlign: "center",
+    textDecorationStyle: "solid",
+    paddingBottom: "10px",
+  },
+  idCell: {
+    width: "10%",
+    borderStyle: "solid",
+    borderBottomWidth: 1,
+    borderRightWidth: 1,
+    padding: 5,
+    fontSize: 10,
+  },
+  moodCell: {
+    width: "15%",
+    borderStyle: "solid",
+    borderBottomWidth: 1,
+    borderRightWidth: 1,
+    padding: 5,
+    fontSize: 10,
+  },
+  createdCell: {
+    width: "25%",
+    borderStyle: "solid",
+    borderBottomWidth: 1,
+    borderRightWidth: 1,
+    padding: 5,
+    fontSize: 10,
+  },
+  noteCell: {
+    width: "100%",
+    borderStyle: "solid",
+    borderBottomWidth: 1,
+    borderRightWidth: 1,
+    padding: 5,
+    fontSize: 10,
+  },
+  header: {
+    backgroundColor: "#eee",
+    fontWeight: "bold",
+  },
+});
+
 const Export = () => {
-  const [endDateVal, setEndDateVal] = useState(null);
   const [startDateOpen, setStartDateOpen] = useState(false);
   const [endDateOpen, setEndDateOpen] = useState(false);
   const [selectStartDate, setSelectStartDate] = useState<Date | undefined>(
@@ -21,6 +92,8 @@ const Export = () => {
   const [selectEndDate, setSelectEndDate] = useState<Date | undefined>(
     undefined,
   );
+  const [showPDF, setShowPDF] = useState(false);
+  const [moodData, setMoodData] = useState([{}]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,12 +102,54 @@ const Export = () => {
       const res = await api.post("/entry/getuserentriesbydate/", {
         user: userEmail,
         startDate: selectStartDate,
-        endDate: endDateVal,
+        endDate: selectEndDate,
       });
-      const moodEntries = res.data.data;
-      console.log(moodEntries);
+      setMoodData(res.data.data);
+      console.log(moodData);
     } catch (error) {}
   };
+
+  useEffect(() => {
+    if (moodData && moodData.length > 0 && moodData[0]?.mood) {
+      setShowPDF(true);
+    }
+  }, [moodData]);
+
+  const MyDocument = (
+    <Document>
+      <Page size={"A4"} style={styles.page}>
+        <Text style={styles.title}>LifeLog</Text>
+        <Text style={styles.heading}>
+          Mood Data
+          {`(${selectStartDate?.toLocaleDateString(
+            "IN",
+          )} - ${selectEndDate?.toLocaleDateString("IN")})`}
+        </Text>
+        <View style={styles.table}>
+          {/* TABLE HEADER */}
+          <View style={styles.row}>
+            <Text style={[styles.idCell, styles.header]}>Id</Text>
+            <Text style={[styles.moodCell, styles.header]}>Mood</Text>
+            <Text style={[styles.createdCell, styles.header]}>Created At</Text>
+            <Text style={[styles.noteCell, styles.header]}>Note</Text>
+          </View>
+
+          {/* TABLE ROW */}
+          {moodData.map((item, idx) => (
+            <View key={idx} style={styles.row}>
+              <Text style={styles.idCell}>{idx + 1}</Text>
+              <Text style={styles.moodCell}>{item.mood}</Text>
+              <Text style={styles.createdCell}>
+                {item.createdAt?.split("T")[0]}
+              </Text>
+              <Text style={styles.noteCell}>{item.note}</Text>
+            </View>
+          ))}
+        </View>
+      </Page>
+    </Document>
+  );
+
   return (
     <>
       <h2 className="text-3xl mb-4">Mood Summary</h2>
@@ -115,11 +230,25 @@ const Export = () => {
             </div>
           </div>
 
-          <Button type="submit" className="my-4 cursor-pointer">
+          <Button type="submit" className="mt-5 mb-4 cursor-pointer">
             Export
           </Button>
         </form>
       </div>
+      {/* MOOD PREVIEW */}
+      {showPDF && (
+        <div className="flex flex-col justify-center items-center">
+          <div className="hidden md:inline w-full lg:w-4/6 ">
+            <PDFViewer className="w-full h-96">{MyDocument}</PDFViewer>
+          </div>
+
+          <Button className="my-10">
+            <PDFDownloadLink document={MyDocument} fileName="data-table.pdf">
+              {({ loading }) => (loading ? "Preparing PDF..." : "Download PDF")}
+            </PDFDownloadLink>
+          </Button>
+        </div>
+      )}
     </>
   );
 };
