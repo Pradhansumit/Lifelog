@@ -19,14 +19,7 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route
-          path="/forget-password"
-          element={
-            <PrivateRoute>
-              <ForgotPassword />
-            </PrivateRoute>
-          }
-        />
+        <Route path="/forget-password" element={<ForgotPassword />} />
       </Routes>
     </BrowserRouter>
   );

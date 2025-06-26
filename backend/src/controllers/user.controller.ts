@@ -141,8 +141,12 @@ export const emailForForgetPassword = async (req, res) => {
     const otpQuery = await prisma.oTP.create({
       data: { userId: user.id, otp: otp },
     });
+
     // logic for sending the opt to the email
-    const isSent = sendEmail(email, otp);
+    const subject = "Verfication code for updating password.";
+    const body = `${otp} is your verificaition code. It is will be expired in 15 minutes.`;
+    const isSent = sendEmail(email, subject, body);
+
     if (isSent) {
       return res.status(200).json({ message: "Email has been sent." });
     } else {

@@ -10,15 +10,16 @@ const transporter = nodemailer.createTransport({
 });
 
 export default async function sendEmail(
-  email: string,
-  otp: number,
+  email: string | string[],
+  subject: string,
+  body: string,
 ): Promise<boolean> {
   try {
     const info = await transporter.sendMail({
       from: "info@lifelog.com",
       to: email,
-      subject: "Verfication code for updating password.",
-      text: `${otp} is your verificaition code. It is will be expired in 15 minutes.`,
+      subject: subject,
+      text: body,
     });
     console.log("Message sent: %s", info.messageId);
     if (info.accepted.length > 0) {
