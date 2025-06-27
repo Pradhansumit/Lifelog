@@ -25,7 +25,8 @@ import {
 const styles = StyleSheet.create({
   page: { padding: 20 },
   table: {
-    display: "table",
+    display: "flex",
+    flexDirection: "column",
     width: "auto",
     borderStyle: "solid",
     borderWidth: 1,
@@ -83,6 +84,12 @@ const styles = StyleSheet.create({
   },
 });
 
+interface MoodEntry {
+  mood: string;
+  note?: string;
+  createdAt: string;
+}
+
 const Export = () => {
   const [startDateOpen, setStartDateOpen] = useState(false);
   const [endDateOpen, setEndDateOpen] = useState(false);
@@ -93,9 +100,9 @@ const Export = () => {
     undefined,
   );
   const [showPDF, setShowPDF] = useState(false);
-  const [moodData, setMoodData] = useState([{}]);
+  const [moodData, setMoodData] = useState<MoodEntry[]>([]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const userEmail = getUserEmailFromToken();

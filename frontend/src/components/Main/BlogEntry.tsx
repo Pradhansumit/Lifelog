@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "../ui/button";
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode, type JwtPayload } from "jwt-decode";
 import api from "@/config/axios";
 import { useNavigate } from "react-router";
 
@@ -13,7 +13,7 @@ const moods = [
 ];
 
 export default function BlogEntry() {
-  const [selectedMood, setSelectedMood] = useState(null);
+  const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [note, setNote] = useState("");
 
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ export default function BlogEntry() {
       }
     });
 
-    const decoded = jwtDecode(token);
+    const decoded = jwtDecode(token) as JwtPayload & { email?: string };
     try {
       const res = await api.post("/entry/create/", {
         user: decoded.email,
@@ -42,7 +42,7 @@ export default function BlogEntry() {
         alert("Done");
         navigate("/");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
       if (error.response.status === 403) {
         alert("You have already added to today's journal");
@@ -50,7 +50,7 @@ export default function BlogEntry() {
     }
   };
 
-  const handleInput = (e) => {
+  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     e.target.style.height = "auto";
     e.target.style.height = `${e.target.scrollHeight}px`;
     +"px";

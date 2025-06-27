@@ -1,19 +1,26 @@
 import api from "@/config/axios";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { useRef } from "react";
+import { useRef, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
+
+interface ForgetPasswordFormProps {
+  setShowOTP: (value: boolean) => void;
+  setShowEmail: (value: boolean) => void;
+  setSendEmailWithOTP: (email: string) => void;
+}
 
 const ForgetPasswordForm = ({
   setShowOTP,
   setShowEmail,
   setSendEmailWithOTP,
-}) => {
-  const emailRef = useRef(null);
+}: ForgetPasswordFormProps) => {
+  const emailRef = useRef<HTMLInputElement | null>(null);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
+      if (!emailRef.current) return;
       setSendEmailWithOTP(emailRef.current.value);
       const res = await api.post("users/forget-password/", {
         email: emailRef.current.value,

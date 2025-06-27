@@ -6,21 +6,21 @@ import { useNavigate } from "react-router";
 import { Button } from "../ui/button";
 
 const PasswordForm = ({}) => {
-  const passwordRef = useRef(null);
-  const confirmPasswordRef = useRef(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const confirmPasswordRef = useRef<HTMLInputElement>(null);
 
   const [notMatch, setNotMatch] = useState(true);
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
 
-      const passwordValue = passwordRef.current.value;
-      const confirmPasswordValue = confirmPasswordRef.current.value;
+      const passwordValue = passwordRef.current?.value;
+      const confirmPasswordValue = confirmPasswordRef.current?.value;
 
-      console.log("23", passwordValue === confirmPasswordValue);
+      if (!passwordValue || !confirmPasswordValue) return;
 
       if (passwordValue !== confirmPasswordValue) {
         setNotMatch(true);

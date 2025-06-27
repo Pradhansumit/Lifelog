@@ -5,12 +5,22 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import api from "@/config/axios";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { Button } from "../ui/button";
 
-const OtpForm = ({ setShowOTP, setShowPassword, sendEmailWithOTP }) => {
+interface OtpFormProps {
+  setShowOTP: (value: boolean) => void;
+  setShowPassword: (value: boolean) => void;
+  sendEmailWithOTP: string;
+}
+
+const OtpForm = ({
+  setShowOTP,
+  setShowPassword,
+  sendEmailWithOTP,
+}: OtpFormProps) => {
   const [otp, setOtp] = useState("");
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
       const res = await api.post("users/verify-otp", {

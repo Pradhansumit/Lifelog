@@ -25,9 +25,37 @@ const COLORS = {
   angry: "#f87171",
 };
 
+interface MoodEntry {
+  mood: keyof typeof COLORS;
+  createdAt: string;
+}
+
+interface MoodCount {
+  [mood: string]: number;
+}
+
+interface LineChartEntry {
+  date: string;
+  happy: number;
+  good: number;
+  neutral: number;
+  sad: number;
+  angry: number;
+}
+
+interface ChartItem {
+  name: keyof typeof COLORS;
+  value: number;
+}
+
+type MoodType = keyof typeof COLORS;
+
 const MoodStats = () => {
-  const [chartData, setChartData] = useState({ pie: [], bar: [] });
-  const [lineChartData, setLineChartData] = useState([]);
+  const [chartData, setChartData] = useState<{
+    pie: ChartItem[];
+    bar: ChartItem[];
+  }>({ pie: [], bar: [] });
+  const [lineChartData, setLineChartData] = useState<LineChartEntry[]>([]);
 
   const apiEntries = async () => {
     try {
@@ -35,9 +63,9 @@ const MoodStats = () => {
       const res = await api.post("/entry/getuserentries/", { user: userEmail });
       const moodEntries = res.data.data;
 
-      const moodCountMonth = {};
-      const moodCountWeek = {};
-      const lineMap = {};
+      const moodCountMonth: MoodCount = {};
+      const moodCountWeek: MoodCount = {};
+      const lineMap: Record<string, LineChartEntry> = {};
 
       const now = new Date();
       const oneMonthAgo = new Date(now);
@@ -46,7 +74,7 @@ const MoodStats = () => {
       const oneWeekAgo = new Date(now);
       oneWeekAgo.setDate(oneWeekAgo.getDate() - 6);
 
-      moodEntries.forEach((entry) => {
+      moodEntries.forEach((entry: MoodEntry) => {
         const mood = entry.mood;
         const createdAt = new Date(entry.createdAt);
         const date = entry.createdAt.split("T")[0];
@@ -62,11 +90,14 @@ const MoodStats = () => {
             neutral: 0,
           };
         }
-        lineMap[date][mood] += 1;
+        if (lineMap[date][mood as keyof LineChartEntry] !== undefined) {
+          lineMap[date][mood as keyof LineChartEntry]++;
+        }
 
         // Pie chart: 1 month
         if (createdAt >= oneMonthAgo) {
-          moodCountMonth[mood] = (moodCountMonth[mood] || 0) + 1;
+          moodCountMonth[mood as keyof MoodCount] =
+            (moodCountMonth[mood] || 0) + 1;
         }
 
         // Bar chart: 1 week
@@ -76,18 +107,22 @@ const MoodStats = () => {
       });
 
       // Prepare data for charts
-      const pieData = Object.entries(moodCountMonth).map(([mood, count]) => ({
-        name: mood,
-        value: count,
-      }));
+      const pieData: ChartItem[] = Object.entries(moodCountMonth).map(
+        ([mood, count]) => ({
+          name: mood as MoodType,
+          value: count as number,
+        }),
+      );
 
-      const barData = Object.entries(moodCountWeek).map(([mood, count]) => ({
-        name: mood,
-        value: count,
-      }));
+      const barData: ChartItem[] = Object.entries(moodCountWeek).map(
+        ([mood, count]) => ({
+          name: mood as MoodType,
+          value: count as number,
+        }),
+      );
 
       const lineData = Object.values(lineMap).sort(
-        (a, b) => new Date(a.date) - new Date(b.date),
+        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
       );
 
       setChartData({ pie: pieData, bar: barData });
@@ -118,7 +153,7 @@ const MoodStats = () => {
                 outerRadius={100}
                 dataKey="value"
               >
-                {chartData.pie.map((entry) => (
+                {chartData.pie.map((entry: ChartItem) => (
                   <Cell key={entry.name} fill={COLORS[entry.name]} />
                 ))}
               </Pie>
@@ -161,7 +196,7 @@ const MoodStats = () => {
               <YAxis allowDecimals={false} />
               <Tooltip />
               <Legend />
-              {Object.keys(COLORS).map((mood) => (
+              {(Object.keys(COLORS) as (keyof typeof COLORS)[]).map((mood) => (
                 <Line
                   key={mood}
                   type="monotone"

@@ -8,15 +8,28 @@ import {
   ChartBar,
   Download,
   LogOut,
-  Settings,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
-const Sidebar = ({ activeMenu, setActiveMenu, children }) => {
+interface SidebarProps {
+  activeMenu: string;
+  setActiveMenu: (menu: string) => void;
+  children: React.ReactNode;
+}
+
+interface DecodedUser {
+  name: string;
+  email: string;
+}
+
+const Sidebar = ({ activeMenu, setActiveMenu, children }: SidebarProps) => {
   const [expanded, setExpanded] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [userInfo, setUserInfo] = useState({});
+  const [userInfo, setUserInfo] = useState<DecodedUser>({
+    name: "",
+    email: "",
+  });
 
   const menuItems = [
     { name: "Home", icon: <Home size={23} /> },
@@ -122,7 +135,6 @@ const Sidebar = ({ activeMenu, setActiveMenu, children }) => {
               {expanded && (
                 <div className="flex flex-col overflow-hidden">
                   <span className="text-sm font-medium text-foreground">
-                    {console.log(userInfo)}
                     {userInfo.name}
                   </span>
                   <span className="text-sm font-medium">{userInfo.email}</span>

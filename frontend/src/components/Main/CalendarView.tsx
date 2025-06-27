@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import api from "@/config/axios";
 import getUserEmailFromToken from "@/utils/userInfoToken";
 import interactionPlugin from "@fullcalendar/interaction";
-import CalendarColors from "../ui/calendarColors";
+import CalendarColors from "../ui/CalendarColors";
 
 const moodColors = {
   happy: "#34d399",
@@ -14,9 +14,21 @@ const moodColors = {
   good: "#fbbf24",
 };
 
+interface MoodEntry {
+  mood: keyof typeof moodColors;
+  note?: string;
+  createdAt: string;
+}
+
+interface EntryDetails {
+  mood: string;
+  note: string;
+  date: string;
+}
+
 const CalendarView = () => {
   const [events, setEvents] = useState([]);
-  const [selectedEntry, setSelectedEntry] = useState(null);
+  const [selectedEntry, setSelectedEntry] = useState<EntryDetails | null>(null);
   const [isOpen, setIsOpen] = useState(false);
 
   const apiEntries = async () => {
@@ -25,7 +37,7 @@ const CalendarView = () => {
       const res = await api.post("/entry/getuserentries/", { user: userEmail });
       const moodEntries = res.data.data;
 
-      const formattedEvents = moodEntries.map((entry) => ({
+      const formattedEvents = moodEntries.map((entry: MoodEntry) => ({
         title: entry.mood,
         date: entry.createdAt.split("T")[0],
         backgroundColor: moodColors[entry.mood],
@@ -105,7 +117,7 @@ const CalendarView = () => {
                           className="text-2xl mb-4 font-semibold text-gray-900"
                           id="dialog-title"
                         >
-                          {selectedEntry.date}
+                          {selectedEntry?.date}
                         </h3>
                         <div className="mt-2">
                           <p>
@@ -113,7 +125,7 @@ const CalendarView = () => {
                               Mood:
                             </span>{" "}
                             <span className="capitalize">
-                              {selectedEntry.mood}
+                              {selectedEntry?.mood}
                             </span>
                           </p>
                           <p>
@@ -121,7 +133,7 @@ const CalendarView = () => {
                               Note:
                             </span>{" "}
                             <span className="capitalize">
-                              {selectedEntry.note || "No note"}
+                              {selectedEntry?.note || "No note"}
                             </span>
                           </p>
                         </div>

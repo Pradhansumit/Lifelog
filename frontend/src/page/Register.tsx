@@ -13,18 +13,18 @@ import api from "@/config/axios";
 import { useNavigate } from "react-router";
 
 const Register = () => {
-  const nameRef: React.RefObject<null> = useRef(null);
-  const emailRef: React.RefObject<null> = useRef(null);
-  const passwordRef: React.RefObject<null> = useRef(null);
+  const nameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
-      const nameValue: React.RefObject<string> = nameRef.current.value;
-      const emailValue: React.RefObject<string> = emailRef.current.value;
-      const passwordValue: React.RefObject<string> = passwordRef.current.value;
+      const nameValue = nameRef.current?.value;
+      const emailValue = emailRef.current?.value;
+      const passwordValue = passwordRef.current?.value;
 
       const res = await api.post("users/register/", {
         name: nameValue,
