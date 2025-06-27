@@ -1,6 +1,7 @@
 {
   "scripts": {
     "dev": "nodemon src/index.ts",
+    "start": "ts-node src/index.ts",
     "migrate": "prisma migrate dev"
   },
   "dependencies": {
