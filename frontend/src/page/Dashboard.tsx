@@ -1,8 +1,8 @@
-import Sidebar from "../components/Sidebar";
-import BlogEntry from "../components/main/BlogEntry";
-import CalendarView from "../components/main/CalendarView";
-import Export from "../components/main/Export";
-import MoodStats from "../components/main/MoodStats";
+import Sidebar from "@/components/Sidebar";
+import BlogEntry from "@/components/main/BlogEntry";
+import CalendarView from "@/components/main/CalendarView";
+import Export from "@/components/main/Export";
+import MoodStats from "@/components/main/MoodStats";
 
 import { useState } from "react";
 
