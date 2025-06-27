@@ -1,5 +1,9 @@
 import { jwtDecode } from "jwt-decode";
 
+interface CustomJwtPayload {
+  email: string;
+}
+
 const getUserEmailFromToken = () => {
   const listOfCookie = document.cookie.split(";");
   let token = "";
@@ -10,7 +14,7 @@ const getUserEmailFromToken = () => {
     }
   });
 
-  const decoded = jwtDecode(token);
+  const decoded = jwtDecode<CustomJwtPayload>(token);
 
   return decoded.email;
 };

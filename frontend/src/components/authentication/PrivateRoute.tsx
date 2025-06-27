@@ -1,17 +1,25 @@
 import { useNavigate } from "react-router";
 import { jwtDecode } from "jwt-decode";
-import { useEffect } from "react";
+import { useEffect, type ReactNode } from "react";
+
+interface DecodedToken {
+  exp?: number;
+}
 
 const checkTokenValidity = (token: string) => {
   try {
-    const decoded = jwtDecode(token);
-    return decoded.exp * 1000 > Date.now();
+    const decoded = jwtDecode<DecodedToken>(token);
+    return decoded.exp !== undefined && decoded.exp * 1000 > Date.now();
   } catch (e) {
     return false;
   }
 };
 
-const PrivateRoute = ({ children }) => {
+interface PrivateRouteProps {
+  children: ReactNode;
+}
+
+const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const cookies = document.cookie;
   const token_name = "jwt_token";
   const listOfCookie = cookies.split(";");
