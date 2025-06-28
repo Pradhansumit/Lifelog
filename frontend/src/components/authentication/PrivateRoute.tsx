@@ -1,20 +1,19 @@
-// import { useNavigate } from "react-router";
-// import { jwtDecode } from "jwt-decode";
-// import { useEffect,
-import { type ReactNode } from "react";
+import { useNavigate } from "react-router";
+import { jwtDecode } from "jwt-decode";
+import { useEffect, type ReactNode } from "react";
 
-// interface DecodedToken {
-//   exp?: number;
-// }
+interface DecodedToken {
+  exp?: number;
+}
 
-// const checkTokenValidity = (token: string) => {
-//   try {
-//     const decoded = jwtDecode<DecodedToken>(token);
-//     return decoded.exp !== undefined && decoded.exp * 1000 > Date.now();
-//   } catch (e) {
-//     return false;
-//   }
-// };
+const checkTokenValidity = (token: string) => {
+  try {
+    const decoded = jwtDecode<DecodedToken>(token);
+    return decoded.exp !== undefined && decoded.exp * 1000 > Date.now();
+  } catch (e) {
+    return false;
+  }
+};
 
 interface PrivateRouteProps {
   children: ReactNode;
@@ -34,13 +33,13 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
     }
   });
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (!token || !checkTokenValidity(token)) {
-  //     navigate("/login");
-  //   }
-  // }, [token]);
+  useEffect(() => {
+    if (!token || !checkTokenValidity(token)) {
+      navigate("/login");
+    }
+  }, [token]);
 
   return children;
 };
