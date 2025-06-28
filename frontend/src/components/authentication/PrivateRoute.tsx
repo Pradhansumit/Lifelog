@@ -29,16 +29,17 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
   listOfCookie.forEach((element) => {
     if (element.trim().startsWith(token_name)) {
       token = element.trim().split("=")[1];
+      console.log(token);
     }
   });
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!token || !checkTokenValidity(token)) {
-      navigate("/login");
-    }
-  }, [token]);
+  // useEffect(() => {
+  //   if (!token || !checkTokenValidity(token)) {
+  //     navigate("/login");
+  //   }
+  // }, [token]);
 
   return children;
 };
