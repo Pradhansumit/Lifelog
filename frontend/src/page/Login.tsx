@@ -9,9 +9,11 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Toaster } from "@/components/ui/sonner";
 import api from "@/config/axios";
 import { useRef } from "react";
 import { Link, useNavigate } from "react-router";
+import { toast } from "sonner";
 
 export default function Login() {
   const emailRef = useRef<HTMLInputElement>(null);
@@ -34,12 +36,14 @@ export default function Login() {
         navigate("/");
       }
     } catch (error) {
+      toast("Email or password is not correct.");
       console.log(error);
     }
   };
 
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+      <Toaster richColors position="top-right" />
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>Login to your account</CardTitle>
