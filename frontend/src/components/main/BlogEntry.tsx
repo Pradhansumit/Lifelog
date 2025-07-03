@@ -22,31 +22,36 @@ export default function BlogEntry() {
 
   const handleSubmit = async () => {
     if (!selectedMood) return alert("Pick a mood!");
-    const listOfCookie = document.cookie.split(";");
-    let token = "";
+    // const listOfCookie = document.cookie.split(";");
+    // let token = "";
 
-    listOfCookie.forEach((element) => {
-      if (element.trim().startsWith("jwt_token")) {
-        token = element.trim().split("=")[1];
-      }
-    });
+    // listOfCookie.forEach((element) => {
+    //   if (element.trim().startsWith("jwt_token")) {
+    //     token = element.trim().split("=")[1];
+    //   }
+    // });
 
-    const decoded = jwtDecode(token) as JwtPayload & { email?: string };
-    try {
-      const res = await api.post("/entry/create/", {
-        user: decoded.email,
-        mood: selectedMood,
-        note: note,
-      });
-      if (res.status === 201) {
-        alert("Done");
-        navigate("/");
+    const token = localStorage.getItem("jwt_token");
+    if (token) {
+      const decoded = jwtDecode(token) as JwtPayload & { email?: string };
+      try {
+        const res = await api.post("/entry/create/", {
+          user: decoded.email,
+          mood: selectedMood,
+          note: note,
+        });
+        if (res.status === 201) {
+          alert("Done");
+          navigate("/");
+        }
+      } catch (error: any) {
+        console.log(error);
+        if (error.response.status === 403) {
+          alert("You have already added to today's journal");
+        }
       }
-    } catch (error: any) {
-      console.log(error);
-      if (error.response.status === 403) {
-        alert("You have already added to today's journal");
-      }
+    } else {
+      alert("User not authenticated.");
     }
   };
 
