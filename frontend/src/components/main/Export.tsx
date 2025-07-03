@@ -106,13 +106,17 @@ const Export = () => {
     e.preventDefault();
     try {
       const userEmail = getUserEmailFromToken();
-      const res = await api.post("/entry/getuserentriesbydate/", {
-        user: userEmail,
-        startDate: selectStartDate,
-        endDate: selectEndDate,
-      });
-      setMoodData(res.data.data);
-      console.log(moodData);
+      if (userEmail) {
+        const res = await api.post("/entry/getuserentriesbydate/", {
+          user: userEmail,
+          startDate: selectStartDate,
+          endDate: selectEndDate,
+        });
+        setMoodData(res.data.data);
+        console.log(moodData);
+      } else {
+        alert("Not Authorized. Token missing.");
+      }
     } catch (error) {}
   };
 

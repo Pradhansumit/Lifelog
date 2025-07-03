@@ -31,8 +31,10 @@ export default function Login() {
         email: emailValue,
         password: passwordValue,
       });
-      console.log(res);
       if (res.status === 200) {
+        if (res.data["token"] !== "") {
+          localStorage.setItem("jwt_token", res.data["token"]);
+        }
         navigate("/");
       }
     } catch (error) {

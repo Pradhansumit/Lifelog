@@ -44,7 +44,7 @@ const Sidebar = ({ activeMenu, setActiveMenu, children }: SidebarProps) => {
     try {
       const res = await api.get("users/logout/");
       if (res.status === 200) {
-        localStorage.removeItem("token");
+        localStorage.removeItem("jwt_token");
         navigate("/login");
       }
     } catch (error) {
@@ -53,16 +53,20 @@ const Sidebar = ({ activeMenu, setActiveMenu, children }: SidebarProps) => {
   };
 
   useEffect(() => {
-    const listOfCookie = document.cookie.split(";");
-    let token = "";
+    // const listOfCookie = document.cookie.split(";");
+    // let token = "";
 
-    listOfCookie.forEach((element) => {
-      if (element.trim().startsWith("jwt_token")) {
-        token = element.trim().split("=")[1];
-      }
-    });
+    // listOfCookie.forEach((element) => {
+    //   if (element.trim().startsWith("jwt_token")) {
+    //     token = element.trim().split("=")[1];
+    //   }
+    // });
 
-    setUserInfo(jwtDecode(token));
+    const token = localStorage.getItem("jwt_token");
+
+    if (token) {
+      setUserInfo(jwtDecode(token));
+    }
   }, []);
 
   return (

@@ -60,73 +60,79 @@ const MoodStats = () => {
   const apiEntries = async () => {
     try {
       const userEmail = getUserEmailFromToken();
-      const res = await api.post("/entry/getuserentries/", { user: userEmail });
-      const moodEntries = res.data.data;
+      if (userEmail) {
+        const res = await api.post("/entry/getuserentries/", {
+          user: userEmail,
+        });
+        const moodEntries = res.data.data;
 
-      const moodCountMonth: MoodCount = {};
-      const moodCountWeek: MoodCount = {};
-      const lineMap: Record<string, LineChartEntry> = {};
+        const moodCountMonth: MoodCount = {};
+        const moodCountWeek: MoodCount = {};
+        const lineMap: Record<string, LineChartEntry> = {};
 
-      const now = new Date();
-      const oneMonthAgo = new Date(now);
-      oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+        const now = new Date();
+        const oneMonthAgo = new Date(now);
+        oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
-      const oneWeekAgo = new Date(now);
-      oneWeekAgo.setDate(oneWeekAgo.getDate() - 6);
+        const oneWeekAgo = new Date(now);
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 6);
 
-      moodEntries.forEach((entry: MoodEntry) => {
-        const mood = entry.mood;
-        const createdAt = new Date(entry.createdAt);
-        const date = entry.createdAt.split("T")[0];
+        moodEntries.forEach((entry: MoodEntry) => {
+          const mood = entry.mood;
+          const createdAt = new Date(entry.createdAt);
+          const date = entry.createdAt.split("T")[0];
 
-        // Line chart data
-        if (!lineMap[date]) {
-          lineMap[date] = {
-            date,
-            happy: 0,
-            sad: 0,
-            good: 0,
-            angry: 0,
-            neutral: 0,
-          };
-        }
-        if (lineMap[date][mood as keyof LineChartEntry] !== undefined) {
-          lineMap[date][mood as keyof LineChartEntry]++;
-        }
+          // Line chart data
+          if (!lineMap[date]) {
+            lineMap[date] = {
+              date,
+              happy: 0,
+              sad: 0,
+              good: 0,
+              angry: 0,
+              neutral: 0,
+            };
+          }
+          if (lineMap[date][mood as keyof LineChartEntry] !== undefined) {
+            lineMap[date][mood as keyof LineChartEntry]++;
+          }
 
-        // Pie chart: 1 month
-        if (createdAt >= oneMonthAgo) {
-          moodCountMonth[mood as keyof MoodCount] =
-            (moodCountMonth[mood] || 0) + 1;
-        }
+          // Pie chart: 1 month
+          if (createdAt >= oneMonthAgo) {
+            moodCountMonth[mood as keyof MoodCount] =
+              (moodCountMonth[mood] || 0) + 1;
+          }
 
-        // Bar chart: 1 week
-        if (createdAt >= oneWeekAgo) {
-          moodCountWeek[mood] = (moodCountWeek[mood] || 0) + 1;
-        }
-      });
+          // Bar chart: 1 week
+          if (createdAt >= oneWeekAgo) {
+            moodCountWeek[mood] = (moodCountWeek[mood] || 0) + 1;
+          }
+        });
 
-      // Prepare data for charts
-      const pieData: ChartItem[] = Object.entries(moodCountMonth).map(
-        ([mood, count]) => ({
-          name: mood as MoodType,
-          value: count as number,
-        }),
-      );
+        // Prepare data for charts
+        const pieData: ChartItem[] = Object.entries(moodCountMonth).map(
+          ([mood, count]) => ({
+            name: mood as MoodType,
+            value: count as number,
+          }),
+        );
 
-      const barData: ChartItem[] = Object.entries(moodCountWeek).map(
-        ([mood, count]) => ({
-          name: mood as MoodType,
-          value: count as number,
-        }),
-      );
+        const barData: ChartItem[] = Object.entries(moodCountWeek).map(
+          ([mood, count]) => ({
+            name: mood as MoodType,
+            value: count as number,
+          }),
+        );
 
-      const lineData = Object.values(lineMap).sort(
-        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-      );
+        const lineData = Object.values(lineMap).sort(
+          (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+        );
 
-      setChartData({ pie: pieData, bar: barData });
-      setLineChartData(lineData);
+        setChartData({ pie: pieData, bar: barData });
+        setLineChartData(lineData);
+      } else {
+        alert("Not Authorized. Token missing.");
+      }
     } catch (error) {
       console.log(error);
     }

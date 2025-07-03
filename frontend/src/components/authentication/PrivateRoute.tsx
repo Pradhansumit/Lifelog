@@ -20,18 +20,18 @@ interface PrivateRouteProps {
 }
 
 const PrivateRoute = ({ children }: PrivateRouteProps) => {
-  const cookies = document.cookie;
-  const token_name = "jwt_token";
-  const listOfCookie = cookies.split(";");
+  // const cookies = document.cookie;
+  // const token_name = "jwt_token";
+  // const listOfCookie = cookies.split(";");
 
-  let token = "";
+  // let token = "";
 
-  listOfCookie.forEach((element) => {
-    if (element.trim().startsWith(token_name)) {
-      token = element.trim().split("=")[1];
-      console.log(token);
-    }
-  });
+  // listOfCookie.forEach((element) => {
+  //   if (element.trim().startsWith(token_name)) {
+  //     token = element.trim().split("=")[1];
+  //   }
+  // });
+  const token = localStorage.getItem("jwt_token");
 
   const navigate = useNavigate();
 

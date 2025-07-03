@@ -34,22 +34,28 @@ const CalendarView = () => {
   const apiEntries = async () => {
     try {
       const userEmail = getUserEmailFromToken();
-      const res = await api.post("/entry/getuserentries/", { user: userEmail });
-      const moodEntries = res.data.data;
+      if (userEmail) {
+        const res = await api.post("/entry/getuserentries/", {
+          user: userEmail,
+        });
+        const moodEntries = res.data.data;
 
-      const formattedEvents = moodEntries.map((entry: MoodEntry) => ({
-        title: entry.mood,
-        date: entry.createdAt.split("T")[0],
-        backgroundColor: moodColors[entry.mood],
-        borderColor: moodColors[entry.mood],
-        textColor: "#fff",
-        extendedProps: {
-          note: entry.note,
-          createdAt: entry.createdAt,
-        },
-      }));
+        const formattedEvents = moodEntries.map((entry: MoodEntry) => ({
+          title: entry.mood,
+          date: entry.createdAt.split("T")[0],
+          backgroundColor: moodColors[entry.mood],
+          borderColor: moodColors[entry.mood],
+          textColor: "#fff",
+          extendedProps: {
+            note: entry.note,
+            createdAt: entry.createdAt,
+          },
+        }));
 
-      setEvents(formattedEvents);
+        setEvents(formattedEvents);
+      } else {
+        alert("Not Authorized. Token missing.");
+      }
     } catch (error) {
       console.log(error);
     }
